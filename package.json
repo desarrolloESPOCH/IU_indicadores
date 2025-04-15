@@ -8,8 +8,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "dev": "ng serve -o",
-    "clean":"ng generate @angular/core:cleanup-unused-imports ",
-    "lint": "ng lint"
+    "clean": "ng generate @angular/core:cleanup-unused-imports ",
+    "lint": "ng lint",
+    "format": "prettier --write \"src/**/*.{ts,html,scss}\""
   },
   "private": true,
   "dependencies": {
@@ -22,6 +23,9 @@
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
     "@primeng/themes": "^19.0.10",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
+    "prettier-eslint": "^16.3.2",
     "primeng": "^19.0.10",
     "rxjs": "~7.8.0",
     "tailwindcss-primeui": "^0.6.1",
