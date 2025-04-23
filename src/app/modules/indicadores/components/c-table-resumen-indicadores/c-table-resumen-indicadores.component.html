@@ -1,0 +1,32 @@
+<div class="card px-5">
+  <p-table
+    [value]="graduados()"
+    stripedRows
+    showGridlines
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
+    <ng-template #header>
+      <tr>
+        <th>Código</th>
+        <th>Periodo</th>
+        <th>Admitidos</th>
+        <th>Matriculados</th>
+        <th>Tasa de Retención</th>
+        <th>Tasa de Deserción</th>
+        <th>Tasa de Titulación</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-product>
+      <tr>
+        <td>{{ product.codigoPeriodo }}</td>
+        <td>{{ product.descripcion }}</td>
+        <td>{{ product.estudiantesNuevosAdmitidos }}</td>
+        <td>{{ product.estudiantesMatriculados }}</td>
+        <td>{{ product.valorRetencion }}</td>
+        <td>{{ product.valorDesercion }}</td>
+        <td>{{ product.ValorTitulacion }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <br /><br />
+</div>

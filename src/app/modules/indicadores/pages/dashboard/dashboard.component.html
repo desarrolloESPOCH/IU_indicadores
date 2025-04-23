@@ -6,7 +6,7 @@
       <div class="flex items-center">
         <img src="./espoch2.png" width="35" alt="" />
         <div>
-          {{ $carreraResource.value().data[0].nombreCarrera }}
+          {{ $carreraResource.value().nombreCarrera }}
         </div>
       </div>
       <!-- <app-c-filter-carreras
@@ -14,54 +14,24 @@
     ></app-c-filter-carreras> -->
     </div>
 
-    <div class="my-12 grid grid-cols-1 md:grid-cols-2 gap-10 pt-5 px-5">
+    <div class="my-12 grid grid-cols-1 md:grid-cols-2 gap-10 pt-5 px-5 card">
       @for (
-        indicador of $carreraResource.value().data[0].indicadores;
+        indicador of $carreraResource.value().indicadores;
         track indicador.titulo
       ) {
         <app-c-chart [$indicador]="indicador" />
       }
 
-      <!-- {{ $carreraResource.value()!.data[0].indicadores[0].periodos | json }} -->
+      @if ($TituladosResource.hasValue()) {
+        <app-c-chart-anios [$indicador]="$TituladosResource.value().data" />
+      }
     </div>
   </div>
 
   <br />
   @if ($carreraResource.hasValue()) {
-    <div class="card px-5">
-      <p-table
-        [value]="$carreraResource.value().data[0].tabla"
-        stripedRows
-        showGridlines
-        [tableStyle]="{ 'min-width': '50rem' }"
-      >
-        <ng-template #header>
-          <tr>
-            <th>Código</th>
-            <th>Periodo</th>
-            <th>Admitidos</th>
-            <th>Matriculados</th>
-            <th>Graduados</th>
-
-            <th>Tasa de Retención</th>
-            <th>Tasa de Deserción</th>
-            <th>Tasa de Titulación</th>
-          </tr>
-        </ng-template>
-        <ng-template #body let-product>
-          <tr>
-            <td>{{ product.codigoPeriodo }}</td>
-            <td>{{ product.descripcion }}</td>
-            <td>{{ product.estudiantesNuevosAdmitidos }}</td>
-            <td>{{ product.estudiantesMatriculados }}</td>
-            <td>{{ product.ValorTitulacion }}</td>
-            <td>{{ product.valorRetencion }}</td>
-            <td>{{ product.valorDesercion }}</td>
-            <td>{{ product.ValorTitulacion }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
-      <br /><br />
-    </div>
+    <app-c-table-resumen-indicadores
+      [graduados]="$carreraResource.value().tabla"
+    ></app-c-table-resumen-indicadores>
   }
 }

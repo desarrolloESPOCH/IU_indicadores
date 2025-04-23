@@ -4,36 +4,30 @@ import {
   input,
   OnInit,
   signal,
-  ViewChild,
 } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
-import { Indicadores } from '../../../shared/models/ICarrera.interfaces';
-import { Popover } from 'primeng/popover';
+import { INumeroGraduados } from '../../../shared/models/ICarrera.interfaces';
 import { PopoverModule } from 'primeng/popover';
 import { AccordionModule } from 'primeng/accordion';
 @Component({
-  selector: 'app-c-chart',
+  selector: 'app-c-chart-anios',
   imports: [ChartModule, PopoverModule, AccordionModule],
-  templateUrl: './c-chart.component.html',
-  styleUrl: './c-chart.component.css',
+  templateUrl: './c-chart-anios.component.html',
+  styleUrl: './c-chart-anios.component.css',
 })
-export class CChartComponent implements OnInit {
-  $indicador = input.required<Indicadores>();
-  $periodos = signal<string[]>(['']);
+export class CChartAniosComponent implements OnInit {
+  $indicador = input.required<INumeroGraduados[]>();
+  $anios = signal<number[]>([0]);
   $valores = signal<number[]>([0]);
   $nombrePeriodo = signal<number>(0);
 
-  // op = viewChild<ElementRef<HTMLButtonElement>>('op');
-
-  @ViewChild('op') popover!: Popover;
-
   ngOnInit() {
     if (this.$indicador()) {
-      this.$periodos.set(
-        this.$indicador()!.periodos!.map((e) => e.codigoPeriodo),
-      );
+      this.$anios.set(this.$indicador().map((e) => e.Anio));
 
-      this.$valores.set(this.$indicador()!.periodos!.map((e) => e.valor));
+      this.$valores.set(this.$indicador().map((e) => e.NumeroGraduados));
+      console.log('this.$anios(): ', this.$anios());
+      console.log('this.$valores(): ', this.$valores());
 
       this.initChart();
     }
@@ -56,7 +50,7 @@ export class CChartComponent implements OnInit {
     );
 
     this.basicData = {
-      labels: this.$periodos(),
+      labels: this.$anios(),
       datasets: [
         {
           data: [
@@ -68,22 +62,16 @@ export class CChartComponent implements OnInit {
             'rgba(6, 182, 212, 0.4)',
             'rgb(107, 114, 128, 0.4)',
             'rgba(139, 92, 246, 0.4)',
-            'rgba(244, 63, 94, 0.4)' /* Rojo */,
             'rgba(34, 197, 94, 0.4)' /* Verde */,
-            'rgba(236, 72, 153, 0.4)' /* Rosa */,
-            'rgba(20, 184, 166, 0.4)' /* Turquesa */,
-            'rgba(168, 85, 247, 0.4)' /* Púrpura */,
+            'rgba(244, 63, 94, 0.4)' /* Rojo */,
           ],
           borderColor: [
             'rgb(249, 115, 22)',
             'rgb(6, 182, 212)',
             'rgb(107, 114, 128)',
             'rgb(139, 92, 246)',
+            'rgba(34, 197, 94 )' /* Verde */,
             'rgba(244, 63, 94)' /* Rojo */,
-            'rgba(34, 197, 94)' /* Verde */,
-            'rgba(236, 72, 153)' /* Rosa */,
-            'rgba(20, 184, 166)' /* Turquesa */,
-            'rgba(168, 85, 247)' /* Púrpura */,
           ],
           borderWidth: 1,
         },
@@ -123,13 +111,5 @@ export class CChartComponent implements OnInit {
       },
     };
     // this.cd.markForCheck();
-  }
-
-  select(value: any) {
-    console.log('value', value!.element.index);
-    this.$nombrePeriodo.set(value!.element.index);
-    this.popover.hide();
-    this.popover.show(event);
-    // this.popover.onEscapeKeydown(event);
   }
 }
