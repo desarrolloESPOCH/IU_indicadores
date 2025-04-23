@@ -1,21 +1,25 @@
-<div class="card flex justify-center">
-  <p-select
-    [options]="groupCarreras()"
-    [(ngModel)]="selectedCarrera"
-    optionLabel="carrera"
-    [filter]="true"
-    filterBy="carrera"
-    [showClear]="true"
-    [group]="true"
-    placeholder="Seleccione una carrera"
-    class="w-full md:w-100"
-    (onChange)="selectedCarreraChanged($event)"
-  >
-    <ng-template let-group #group>
-      <div class="flex items-center text-blue-400">
-        <i class="pi pi-building mx-2"></i>
-        <span>{{ group.facultad }}</span>
-      </div>
-    </ng-template>
-  </p-select>
-</div>
+@if ($facultadResource.hasValue()) {
+  <!-- @let facultades=facultadResource.value() -->
+  <div class="card flex justify-center">
+    <p-select
+      #carreraSelector
+      [options]="$facultadResource.value().data"
+      [(ngModel)]="$selectedCarrera"
+      optionLabel="carrera"
+      [filter]="true"
+      filterBy="carrera"
+      [showClear]="true"
+      [group]="true"
+      placeholder="Seleccione una carrera"
+      class="w-full md:w-100"
+      (onChange)="changeCarrera(carreraSelector.value)"
+    >
+      <ng-template let-group #group>
+        <div class="flex items-center text-blue-400">
+          <i class="pi pi-building mx-2"></i>
+          <span>{{ group.facultad }}</span>
+        </div>
+      </ng-template>
+    </p-select>
+  </div>
+}

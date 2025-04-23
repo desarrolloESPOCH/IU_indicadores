@@ -1,82 +1,67 @@
-<div class="relative">
-  <div class="fixed top-0 right-0 left-0 z-1000 py-2">
-    <app-c-filter-carreras
+@if ($carreraResource.hasValue()) {
+  <div class="relative">
+    <div
+      class="fixed top-0 right-0 left-0 z-1000 py-2 bg-white text-gray-700 text-base font-bold text-center shadow-md"
+    >
+      <div class="flex items-center">
+        <img src="./espoch2.png" width="35" alt="" />
+        <div>
+          {{ $carreraResource.value().data[0].nombreCarrera }}
+        </div>
+      </div>
+      <!-- <app-c-filter-carreras
       (codCarrera)="getIndicadores($event)"
-    ></app-c-filter-carreras>
-  </div>
-
-  <div class="my-12 grid grid-cols-1 md:grid-cols-2 gap-10 pt-5 px-5">
-    <div class="bg-gray-200 p-4 shadow-md">
-      <h1 class="text-3xl font-bold underline">Estudiantes Admitidos</h1>
-      <div class="card shadow-2xs">
-        <p-chart type="bar" [data]="basicData" [options]="basicOptions" />
-      </div>
-    </div>
-    <div class="bg-gray-200 p-4">
-      <h1 class="text-3xl font-bold underline">Estudiantes Matriculados</h1>
-      <div class="card">
-        <p-chart type="bar" [data]="basicData" [options]="basicOptions" />
-      </div>
+    ></app-c-filter-carreras> -->
     </div>
 
-    <div class="bg-gray-200 p-4">
-      <h1 class="text-3xl font-bold underline">Estudiantes Graduados</h1>
-      <div class="card">
-        <p-chart type="bar" [data]="basicData" [options]="basicOptions" />
-      </div>
-    </div>
+    <div class="my-12 grid grid-cols-1 md:grid-cols-2 gap-10 pt-5 px-5">
+      @for (
+        indicador of $carreraResource.value().data[0].indicadores;
+        track indicador.titulo
+      ) {
+        <app-c-chart [$indicador]="indicador" />
+      }
 
-    <div class="bg-gray-200 p-4">
-      <h1 class="text-3xl font-bold underline">Tasa de Retención</h1>
-      <div class="card">
-        <p-chart type="bar" [data]="basicData" [options]="basicOptions" />
-      </div>
-    </div>
-    <div class="bg-gray-200 p-4">
-      <h1 class="text-3xl font-bold underline">Tasa de Deserción</h1>
-      <div class="card">
-        <p-chart type="bar" [data]="basicData" [options]="basicOptions" />
-      </div>
-    </div>
-
-    <div class="bg-gray-200 p-4">
-      <h1 class="text-3xl font-bold underline">Tasa de Titulación</h1>
-      <div class="card">
-        <p-chart type="bar" [data]="basicData" [options]="basicOptions" />
-      </div>
+      <!-- {{ $carreraResource.value()!.data[0].indicadores[0].periodos | json }} -->
     </div>
   </div>
-</div>
 
-<div class="card px-5">
-  <p-table
-    [value]="products"
-    stripedRows
-    showGridlines
-    [tableStyle]="{ 'min-width': '50rem' }"
-  >
-    <ng-template #header>
-      <tr>
-        <th>Periodo</th>
-        <th>Admitidos</th>
-        <th>Matriculados</th>
-        <th>Graduados</th>
+  <br />
+  @if ($carreraResource.hasValue()) {
+    <div class="card px-5">
+      <p-table
+        [value]="$carreraResource.value().data[0].tabla"
+        stripedRows
+        showGridlines
+        [tableStyle]="{ 'min-width': '50rem' }"
+      >
+        <ng-template #header>
+          <tr>
+            <th>Código</th>
+            <th>Periodo</th>
+            <th>Admitidos</th>
+            <th>Matriculados</th>
+            <th>Graduados</th>
 
-        <th>Tasa de Retención</th>
-        <th>Tasa de Deserción</th>
-        <th>Tasa de Titulación</th>
-      </tr>
-    </ng-template>
-    <ng-template #body let-product>
-      <tr>
-        <td>{{ product.code }}</td>
-        <td>{{ product.admitidos }}</td>
-        <td>{{ product.matriculados }}</td>
-        <td>{{ product.graduados }}</td>
-        <td>{{ product.retension }}</td>
-        <td>{{ product.desercion }}</td>
-        <td>{{ product.titulacion }}</td>
-      </tr>
-    </ng-template>
-  </p-table>
-</div>
+            <th>Tasa de Retención</th>
+            <th>Tasa de Deserción</th>
+            <th>Tasa de Titulación</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-product>
+          <tr>
+            <td>{{ product.codigoPeriodo }}</td>
+            <td>{{ product.descripcion }}</td>
+            <td>{{ product.estudiantesNuevosAdmitidos }}</td>
+            <td>{{ product.estudiantesMatriculados }}</td>
+            <td>{{ product.ValorTitulacion }}</td>
+            <td>{{ product.valorRetencion }}</td>
+            <td>{{ product.valorDesercion }}</td>
+            <td>{{ product.ValorTitulacion }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <br /><br />
+    </div>
+  }
+}

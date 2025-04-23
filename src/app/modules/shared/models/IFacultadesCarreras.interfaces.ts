@@ -1,9 +1,9 @@
 export interface ICarrera {
   carrera: string;
-  codigoCarrrera: string;
+  codigoCarrera: string;
 }
 
-export interface IListFacultadesCarreras {
+export interface IFacultadCarrera {
   facultad: string;
-  carreras: ICarrera[];
+  items: ICarrera[];
 }

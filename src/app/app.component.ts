@@ -1,15 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
-import { DashboardComponent } from './modules/indicadores/pages/dashboard/dashboard.component';
 import { PrimeNG } from 'primeng/config';
+import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-root',
-  imports: [ButtonModule, DashboardComponent],
+  imports: [ButtonModule, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'IU_indicadores';
   constructor(private primeng: PrimeNG) {}
 
