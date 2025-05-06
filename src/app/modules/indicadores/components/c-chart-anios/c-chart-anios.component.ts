@@ -20,6 +20,8 @@ import { ChartType } from '../c-chart/c-chart.component';
 })
 export class CChartAniosComponent implements OnInit {
   $indicador = input.required<INumeroGraduados[]>();
+  $descripcionIndicador = input<string>('');
+
   $anios = signal<number[]>([0]);
   $valores = signal<number[]>([0]);
   $nombrePeriodo = signal<number>(0);

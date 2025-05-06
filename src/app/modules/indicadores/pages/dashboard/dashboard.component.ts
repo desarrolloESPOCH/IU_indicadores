@@ -42,6 +42,15 @@ export class DashboardComponent {
     { name: 'Radar', code: 'radar' },
   ]);
 
+  descripcionIndicadores = signal<any[]>([
+    'La tasa de retención representa el porcentaje de estudiantes matriculados en el primer nivel de una carrera que continúan sus estudios en la carrera durante los dos años posteriores a su ingreso. La información de la tasa de retención se presenta por período académico y para los últimos cinco años.',
+    'La tasa de deserción corresponde al porcentaje de estudiantes matriculados en el primer nivel de la carrera y que no continúan sus estudios al menos dos años posteriores a su ingreso. La información de la tasa de deserción se presenta por período académico y para los últimos cinco años.',
+    'La tasa de titulación representa el porcentaje de estudiantes que culminan su formación académica y obtienen el título correspondiente dentro del plazo formal de duración de la carrera más tres períodos académicos adicionales, en relación con el total de estudiantes que se matricularon en primer nivel en una cohorte específica. La información de la tasa de titulación se presenta por período académico y para los últimos cinco años.',
+    'Este indicador cuantifica el total de estudiantes que han cumplido satisfactoriamente con todos los requisitos académicos y administrativos para obtener el título correspondiente a la carrera, durante un año calendario específico. La información se presenta de forma consolidada para los últimos cinco años.',
+    'Este indicador registra el número total de estudiantes que han formalizado su matrícula en la carrera durante un período académico específico. La información se presenta de forma desagregada para los últimos cinco años.',
+    'Este indicador corresponde al número total de estudiantes que han sido aceptados formalmente para iniciar sus estudios en el primer nivel de la carrera, tras cumplir con los requisitos de ingreso establecidos por la institución, durante un período académico específico. La información se presenta de manera desagregada para los últimos cinco años.',
+  ]);
+
   // selectedGrafica: Grafica = ;
   selectedGrafica = linkedSignal(() => {
     return this.graficos()[0];

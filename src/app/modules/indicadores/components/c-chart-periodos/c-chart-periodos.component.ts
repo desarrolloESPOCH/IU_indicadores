@@ -21,6 +21,8 @@ import { ChartType } from '../c-chart/c-chart.component';
 export class CChartPeriodosComponent implements OnInit {
   $indicador = input.required<INumeroPeriodos[]>();
   $titulo = input.required<string>();
+  $descripcionIndicador = input<string>('');
+
   $periodos = signal<string[]>(['']);
   $anios = signal<string[]>(['']);
   $valores = signal<number[]>([0]);

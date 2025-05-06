@@ -22,6 +22,7 @@ export class CChartComponent implements OnInit {
   $indicador = input.required<Indicadores>();
   $chart = input<string>(ChartType.Bar);
   $type = input<number>(1);
+  $descripcionIndicador = input<string>('');
 
   $periodos = signal<string[]>(['']);
   $valores = signal<number[]>([0]);

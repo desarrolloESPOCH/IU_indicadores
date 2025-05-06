@@ -28,12 +28,14 @@
     <div class="my-12 grid grid-cols-1 md:grid-cols-2 gap-10 pt-5 px-5 card">
       @for (
         indicador of $carreraResource.value().indicadores;
+        let i = $index;
         track indicador.titulo
       ) {
         <app-c-chart
           [$indicador]="indicador"
           [$chart]="chartValue()"
           [$type]="1"
+          [$descripcionIndicador]="descripcionIndicadores()[i]"
         />
       }
 
@@ -41,6 +43,7 @@
         <app-c-chart-anios
           [$chart]="chartValue()"
           [$indicador]="$TituladosResource.value().data"
+          [$descripcionIndicador]="descripcionIndicadores()[3]"
         />
       }
       @if ($MatriculadosResource.hasValue()) {
@@ -49,6 +52,7 @@
           [$chart]="chartValue()"
           [$titulo]="'Número de matriculados'"
           [$indicador]="$MatriculadosResource.value().data"
+          [$descripcionIndicador]="descripcionIndicadores()[4]"
         />
       }
 
@@ -57,6 +61,7 @@
           [$chart]="chartValue()"
           [$titulo]="'Número de admitidos'"
           [$indicador]="$AdmitidosResource.value().data"
+          [$descripcionIndicador]="descripcionIndicadores()[5]"
         />
       }
     </div>
