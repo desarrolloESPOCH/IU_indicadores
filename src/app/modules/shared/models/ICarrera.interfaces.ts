@@ -15,8 +15,15 @@ export interface ICarreraIndicador {
   indicadores: Indicadores[];
   tabla: any;
 }
-
 export interface INumeroGraduados {
   Anio: number;
+  codPeriodo?: string;
   NumeroGraduados: number;
+  cantidad?: number;
+}
+
+export interface INumeroPeriodos {
+  codPeriodo: string;
+  descripcion: string;
+  cantidad: number;
 }

@@ -24,7 +24,29 @@
     </div>
     <br />
     <div class="">
-      <p-chart type="bar" [data]="basicData" [options]="basicOptions" />
+      <p-chart
+        type="bar"
+        [data]="basicData"
+        [options]="basicOptions"
+        (onDataSelect)="select($event)"
+      />
     </div>
   </div>
+
+  <p-popover #op>
+    <div class="flex flex-col gap-4 w-[25rem]">
+      <div>
+        <span
+          class="font-medium text-surface-900 dark:text-surface-0 block mb-2"
+          >Periodo:
+          {{ $indicador()[$nombrePeriodo()].Anio }}
+        </span>
+        <span
+          class="font-medium text-surface-900 dark:text-surface-0 block mb-2"
+          >TOTAL:
+          {{ $indicador()[$nombrePeriodo()].NumeroGraduados }} estudiantes
+        </span>
+      </div>
+    </div>
+  </p-popover>
 }

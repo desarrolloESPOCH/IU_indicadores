@@ -5,7 +5,7 @@
         <p-accordion-panel value="0">
           <p-accordion-header>
             <h1 class="text-3xl font-bold text-gray-600">
-              {{ $indicador().titulo }}
+              {{ $titulo() }}
               <i class="pi pi-info-circle text-blue-400"></i></h1
           ></p-accordion-header>
           <p-accordion-content>
@@ -25,9 +25,10 @@
     <br />
     <div class="">
       <p-chart
+        type="bar"
+        (onDataSelect)="select($event)"
         [data]="basicData"
         [options]="basicOptions"
-        (onDataSelect)="select($event)"
       />
     </div>
   </div>
@@ -37,19 +38,12 @@
       <div>
         <span
           class="font-medium text-surface-900 dark:text-surface-0 block mb-2"
-        >
-          {{ $indicador().periodos[$nombrePeriodo()].codigoPeriodo }}</span
-        >
-        <span
-          class="font-medium text-surface-900 dark:text-surface-0 block mb-2"
           >Periodo:
-          {{ $indicador().periodos[$nombrePeriodo()].nombrePeriodo }}</span
-        >
+          {{ $indicador()[$nombrePeriodo()].descripcion }}
+        </span>
         <span
           class="font-medium text-surface-900 dark:text-surface-0 block mb-2"
-        >
-          {{ $indicador().titulo }}
-          {{ $indicador().periodos[$nombrePeriodo()].valor }} %
+          >TOTAL: {{ $indicador()[$nombrePeriodo()].cantidad }} estudiantes
         </span>
       </div>
     </div>

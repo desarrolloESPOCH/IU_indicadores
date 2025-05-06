@@ -4,6 +4,7 @@ import { IResponse } from '../models/IResponse.interface';
 import {
   ICarreraIndicador,
   INumeroGraduados,
+  INumeroPeriodos,
 } from '../models/ICarrera.interfaces';
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,6 @@ export class CarreraService {
     }
     const response = await fetch(`${environment.api}/carrera/${idCarrera}`);
     const data = await response.json();
-    console.log('data: ', data);
     return data;
   };
 
@@ -28,7 +28,24 @@ export class CarreraService {
       `${environment.api}/carrera/graduados/${idCarrera}`,
     );
     const data = await response.json();
-    console.log(data);
+    return data;
+  };
+  getAdmitidosPorPeriodos = async (
+    idCarrera: string,
+  ): Promise<IResponse<INumeroPeriodos>> => {
+    const response = await fetch(
+      `${environment.api}/carrera/admitidos/${idCarrera}`,
+    );
+    const data = await response.json();
+    return data;
+  };
+  getMatriculadosPorPeriodo = async (
+    idCarrera: string,
+  ): Promise<IResponse<INumeroPeriodos>> => {
+    const response = await fetch(
+      `${environment.api}/carrera/matriculados/${idCarrera}`,
+    );
+    const data = await response.json();
     return data;
   };
 }

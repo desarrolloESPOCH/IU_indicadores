@@ -35,7 +35,6 @@ export class CFilterCarrerasComponent {
 
   //cambio de carrera seleccionada
   changeCarrera = (carrera: ICarrera) => {
-    console.log('carrera: ', carrera);
     this.codCarrera.emit(carrera.codigoCarrera);
     this.$selectedCarrera.set(carrera);
   };

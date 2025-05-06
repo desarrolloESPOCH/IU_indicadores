@@ -1,14 +1,17 @@
 import {
   ChangeDetectorRef,
   Component,
+  effect,
   input,
   OnInit,
   signal,
+  ViewChild,
 } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { INumeroGraduados } from '../../../shared/models/ICarrera.interfaces';
-import { PopoverModule } from 'primeng/popover';
+import { Popover, PopoverModule } from 'primeng/popover';
 import { AccordionModule } from 'primeng/accordion';
+import { ChartType } from '../c-chart/c-chart.component';
 @Component({
   selector: 'app-c-chart-anios',
   imports: [ChartModule, PopoverModule, AccordionModule],
@@ -20,14 +23,17 @@ export class CChartAniosComponent implements OnInit {
   $anios = signal<number[]>([0]);
   $valores = signal<number[]>([0]);
   $nombrePeriodo = signal<number>(0);
+  $chart = input<string>(ChartType.Bar);
+  effectloader = effect(() => {
+    this.$chart();
 
+    this.initChart();
+  });
   ngOnInit() {
     if (this.$indicador()) {
       this.$anios.set(this.$indicador().map((e) => e.Anio));
 
       this.$valores.set(this.$indicador().map((e) => e.NumeroGraduados));
-      console.log('this.$anios(): ', this.$anios());
-      console.log('this.$valores(): ', this.$valores());
 
       this.initChart();
     }
@@ -53,6 +59,7 @@ export class CChartAniosComponent implements OnInit {
       labels: this.$anios(),
       datasets: [
         {
+          type: this.$chart(),
           data: [
             ...this.$valores(),
             // 10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
@@ -111,5 +118,14 @@ export class CChartAniosComponent implements OnInit {
       },
     };
     // this.cd.markForCheck();
+  }
+
+  @ViewChild('op') popover!: Popover;
+
+  select(value: any) {
+    this.$nombrePeriodo.set(value!.element.index);
+    console.log(value.element.index);
+    this.popover.hide();
+    this.popover.show(event);
   }
 }
