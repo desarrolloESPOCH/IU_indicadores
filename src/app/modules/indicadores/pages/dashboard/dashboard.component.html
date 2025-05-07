@@ -25,7 +25,9 @@
       </div>
     </div>
 
-    <div class="my-12 grid grid-cols-1 md:grid-cols-2 gap-10 pt-5 px-5 card">
+    <div
+      class="my-12 grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-10 pt-5 px-5 card max-w-[1920px] mx-auto"
+    >
       @for (
         indicador of $carreraResource.value().indicadores;
         let i = $index;
@@ -40,6 +42,8 @@
       }
 
       @if ($TituladosResource.hasValue()) {
+        <!-- {{ $TituladosResource.value().data | json }} -->
+
         <app-c-chart-anios
           [$chart]="chartValue()"
           [$indicador]="$TituladosResource.value().data"
@@ -47,7 +51,6 @@
         />
       }
       @if ($MatriculadosResource.hasValue()) {
-        <!-- {{ $MatriculadosResource.value().data | json }} -->
         <app-c-chart-periodos
           [$chart]="chartValue()"
           [$titulo]="'Número de matriculados'"
@@ -69,9 +72,16 @@
 
   <br />
   @if ($carreraResource.hasValue()) {
-    <app-c-table-resumen-indicadores
-      [graduados]="$carreraResource.value().tabla"
-    ></app-c-table-resumen-indicadores>
+    <div class="grid grid-cols-1 md:grid-cols-3">
+      <app-c-table-resumen-indicadores
+        class="col-span-1 md:col-span-2"
+        [graduados]="$resumen()"
+      />
+      <app-c-table-resumen-graduados
+        class="col-span-1 md:col-span-1"
+        [graduados]="$TituladosResource.value()!.data"
+      />
+    </div>
   }
 } @else {
   <div class="flex flex-col items-center justify-center h-screen">

@@ -17,6 +17,7 @@ import { CChartAniosComponent } from '../../components/c-chart-anios/c-chart-ani
 import { CTableResumenIndicadoresComponent } from '../../components/c-table-resumen-indicadores/c-table-resumen-indicadores.component';
 import { CChartPeriodosComponent } from '../../components/c-chart-periodos/c-chart-periodos.component';
 import { Select } from 'primeng/select';
+import { CTableResumenGraduadosComponent } from '../../components/c-table-resumen-graduados/c-table-resumen-graduados.component';
 @Component({
   selector: 'app-dashboard',
   imports: [
@@ -28,6 +29,7 @@ import { Select } from 'primeng/select';
     CChartAniosComponent,
     CTableResumenIndicadoresComponent,
     CChartPeriodosComponent,
+    CTableResumenGraduadosComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
@@ -43,11 +45,15 @@ export class DashboardComponent {
   ]);
 
   descripcionIndicadores = signal<any[]>([
+    //tasa de retencion
     'La tasa de retención representa el porcentaje de estudiantes matriculados en el primer nivel de una carrera que continúan sus estudios en la carrera durante los dos años posteriores a su ingreso. La información de la tasa de retención se presenta por período académico y para los últimos cinco años.',
     'La tasa de deserción corresponde al porcentaje de estudiantes matriculados en el primer nivel de la carrera y que no continúan sus estudios al menos dos años posteriores a su ingreso. La información de la tasa de deserción se presenta por período académico y para los últimos cinco años.',
-    'La tasa de titulación representa el porcentaje de estudiantes que culminan su formación académica y obtienen el título correspondiente dentro del plazo formal de duración de la carrera más tres períodos académicos adicionales, en relación con el total de estudiantes que se matricularon en primer nivel en una cohorte específica. La información de la tasa de titulación se presenta por período académico y para los últimos cinco años.',
-    'Este indicador cuantifica el total de estudiantes que han cumplido satisfactoriamente con todos los requisitos académicos y administrativos para obtener el título correspondiente a la carrera, durante un año calendario específico. La información se presenta de forma consolidada para los últimos cinco años.',
+    'La tasa de titulación representa el porcentaje de estudiantes que culminan su formación académica y obtienen el título correspondiente dentro del plazo formal de duración de la carrera más tres períodos académicos adicionales, en relación con el total de estudiantes que se matricularon en primer nivel en una cohorte específica. La información de la tasa de titulación se presenta por período académico y para los últimos cinco años. Para el período académico en curso, el valor de la tasa se calcula únicamente cuando dicho período haya finalizado y se dispone de la información completa de titulación de la cohorte evaluada.',
+    //numero de graduados
+    'Este indicador cuantifica el total de estudiantes que han cumplido satisfactoriamente con todos los requisitos académicos y administrativos para obtener el título correspondiente a la carrera, durante un año calendario específico. La información se presenta de forma consolidada para los últimos cinco años. Para el año fiscal en curso, la información del número de graduados se actualiza de manera progresiva conforme se ejecutan los procesos académicos y avanza el calendario institucional. El dato se consolida una vez finalizado el año respectivo.',
+    //numero de matriculados
     'Este indicador registra el número total de estudiantes que han formalizado su matrícula en la carrera durante un período académico específico. La información se presenta de forma desagregada para los últimos cinco años.',
+    //numero de admitidos
     'Este indicador corresponde al número total de estudiantes que han sido aceptados formalmente para iniciar sus estudios en el primer nivel de la carrera, tras cumplir con los requisitos de ingreso establecidos por la institución, durante un período académico específico. La información se presenta de manera desagregada para los últimos cinco años.',
   ]);
 
@@ -60,6 +66,27 @@ export class DashboardComponent {
 
   $carrera = linkedSignal(() => {
     return '';
+  });
+
+  $resumen = linkedSignal(() => {
+    const A = this.$carreraResource.value()?.tabla;
+    const B = this.$MatriculadosResource.value()?.data;
+    const C = this.$AdmitidosResource.value()?.data;
+
+    return A.map((itemA: any) => {
+      const itemB = B!.find(
+        (itemB) => itemB.codPeriodo === itemA.codigoPeriodo,
+      );
+      const itemC = C!.find(
+        (itemC) => itemC.codPeriodo === itemA.codigoPeriodo,
+      );
+
+      return {
+        ...itemA,
+        valorMatriculados: itemB ? itemB.cantidad : 0,
+        ValorAdmitidos: itemC ? itemC.cantidad : 0,
+      };
+    });
   });
 
   loaderEffect = effect(() => {

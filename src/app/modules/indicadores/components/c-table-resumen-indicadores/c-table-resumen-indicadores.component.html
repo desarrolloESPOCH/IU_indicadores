@@ -4,24 +4,41 @@
     stripedRows
     showGridlines
     [tableStyle]="{ 'min-width': '50rem' }"
+    [size]="'small'"
+    selectionMode="single"
+    [responsive]="true"
   >
     <ng-template #header>
       <tr>
-        <th>Código</th>
-        <th>Periodo</th>
-        <!-- <th>Admitidos</th>
-        <th>Matriculados</th> -->
-        <th>Tasa de Retención</th>
-        <th>Tasa de Deserción</th>
-        <th>Tasa de Titulación</th>
+        <th pSortableColumn="codigoPeriodo">
+          CÓDIGO <p-sortIcon field="codigoPeriodo" />
+        </th>
+        <th pSortableColumn="descripcion">
+          PERIODO <p-sortIcon field="descripcion" />
+        </th>
+        <th pSortableColumn="ValorAdmitidos">
+          ADMITIDOS <p-sortIcon field="ValorAdmitidos" />
+        </th>
+        <th pSortableColumn="valorMatriculados">
+          MATRICULADOS <p-sortIcon field="valorMatriculados" />
+        </th>
+        <th pSortableColumn="valorRetencion">
+          TASA DE RETENCIÓN <p-sortIcon field="valorRetencion" />
+        </th>
+        <th pSortableColumn="valorDesercion">
+          TASA DE DESERCIÓN <p-sortIcon field="valorDesercion" />
+        </th>
+        <th pSortableColumn="ValorTitulacion">
+          TASA DE TITULACIÓN <p-sortIcon field="ValorTitulacion" />
+        </th>
       </tr>
     </ng-template>
     <ng-template #body let-product>
-      <tr>
+      <tr [pSelectableRow]="product">
         <td>{{ product.codigoPeriodo }}</td>
         <td>{{ product.descripcion }}</td>
-        <!-- <td>{{ product.estudiantesNuevosAdmitidos }}</td>
-        <td>{{ product.estudiantesMatriculados }}</td> -->
+        <td>{{ product.ValorAdmitidos }}</td>
+        <td>{{ product.valorMatriculados }}</td>
         <td>{{ product.valorRetencion }} %</td>
         <td>{{ product.valorDesercion }} %</td>
         <td>{{ product.ValorTitulacion }} %</td>

@@ -1,0 +1,29 @@
+<div class="card px-5">
+  <p-table
+    [value]="graduados()"
+    stripedRows
+    showGridlines
+    [tableStyle]="{ 'min-width': '20rem' }"
+    [size]="'small'"
+    selectionMode="single"
+    [responsive]="true"
+  >
+    <ng-template #header>
+      <tr>
+        <th pSortableColumn="Anio">
+          AÑO DE GRADUACIÓN <p-sortIcon field="Anio" />
+        </th>
+        <th pSortableColumn="NumeroGraduados">
+          NÚMERO DE GRADUADOS <p-sortIcon field="NumeroGraduados" />
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-product>
+      <tr [pSelectableRow]="product">
+        <td>{{ product.Anio }}</td>
+        <td>{{ product.NumeroGraduados }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <br /><br />
+</div>
