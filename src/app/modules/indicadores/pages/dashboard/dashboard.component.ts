@@ -53,7 +53,7 @@ export class DashboardComponent {
     'Este indicador cuantifica el total de estudiantes que han cumplido satisfactoriamente con todos los requisitos académicos y administrativos para obtener el título correspondiente a la carrera, durante un año calendario específico. La información se presenta de forma consolidada para los últimos cinco años. Para el año fiscal en curso, la información del número de graduados se actualiza de manera progresiva conforme se ejecutan los procesos académicos y avanza el calendario institucional. El dato se consolida una vez finalizado el año respectivo.',
     //numero de matriculados
     'Este indicador registra el número total de estudiantes que han formalizado su matrícula en la carrera durante un período académico específico. La información se presenta de forma desagregada para los últimos cinco años.',
-    //numero de admitidos
+    //número de admitidos
     'Este indicador corresponde al número total de estudiantes que han sido aceptados formalmente para iniciar sus estudios en el primer nivel de la carrera, tras cumplir con los requisitos de ingreso establecidos por la institución, durante un período académico específico. La información se presenta de manera desagregada para los últimos cinco años.',
   ]);
 
