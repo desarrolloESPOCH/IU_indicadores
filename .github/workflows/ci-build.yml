@@ -2,9 +2,9 @@ name: "Flujo CI-Build"
 run-name: "CI-Build para ${{ github.event_name }} de ${{ github.actor }} en ${{ github.ref }}"
 
 on:
-  push:
+  pull_request:
     branches: ["main"]
-    # types: [closed]
+    types: [opened]
 
 env:
   ANGULAR_CLI_VERSION: 19
@@ -43,10 +43,13 @@ jobs:
         run: ng build --configuration=production
 
       - name: "Crear carpeta destino si no existe"
-        run: mkdir -p /home/desarrollo2/iu/IU_Indicadores/dist/
+        run: mkdir -p /home/desarrollo2/iu/IU_Indicadores/distinto/
+
+      - name: "Verificar archivos dentro del contenedor antes de mover"
+        run: ls -l /_w/IU_indicadores/IU_indicadores/dist/
 
       - name: "Mover `dist` al destino final"
-        run: mv /__w/IU_indicadores/IU_indicadores/dist/ /home/desarrollo2/iu/IU_Indicadores/dist/
+        run: mv /_w/IU_indicadores/IU_indicadores/dist/ /home/desarrollo2/iu/IU_Indicadores/dist/
 
       - name: "Verificar archivos en el destino"
         run: ls -la /home/desarrollo2/iu/IU_Indicadores/dist/
