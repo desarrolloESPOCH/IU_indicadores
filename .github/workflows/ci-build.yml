@@ -1,0 +1,77 @@
+# cspell:disable
+name: "Flujo CI-Build"
+run-name: "CI-Build para ${{ github.event_name }} de ${{ github.actor }} en ${{ github.ref }}"
+on:
+  pull_request:
+    branches: ["main"]
+    types: [closed]
+env:
+  ANGULAR_CLI_VERSION: 19
+
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - name: "Instalar CLI de Angular"
+        run: npm install -g @angular/cli@${{ env.ANGULAR_CLI_VERSION }}
+      - name: "Instalar dependencias"
+        run: npm install
+      - name: "Ejecutar linter"
+        run: npm run lint
+  build:
+    needs: linter
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - name: "Instalar CLI de Angular"
+        run: npm install -g @angular/cli@${{ env.ANGULAR_CLI_VERSION }}
+      - name: "Instalar dependencias"
+        run: npm install
+      - name: "Compilar Angular"
+        run: ng build
+      - name: "Guardar carpeta"
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: dist/
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Descargar artefacto"
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: dist/
+
+      - name: "Configurar SSH"
+        run: |
+          echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan servidor >> ~/.ssh/known_hosts
+      - name: "Subir artefacto a servidor"
+        run: scp -r dist/ desarrollo2@pruebas.espoch.edu.ec:/home/desarrollo2/iu
