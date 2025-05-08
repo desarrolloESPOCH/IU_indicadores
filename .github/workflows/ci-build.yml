@@ -53,7 +53,7 @@ jobs:
       - name: "Compilar Angular"
         run: ng build
       - name: "Guardar carpeta"
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build
           path: dist/
