@@ -4,7 +4,7 @@ run-name: "CI-Build para ${{ github.event_name }} de ${{ github.actor }} en ${{ 
 on:
   pull_request:
     branches: ["main"]
-    types: [closed]
+    # types: [closed]
 env:
   ANGULAR_CLI_VERSION: 19
 
