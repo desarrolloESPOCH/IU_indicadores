@@ -72,6 +72,6 @@ jobs:
         run: |
           echo ${{secrets.SSH_PRIVATE_KEY}} > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan servidor >> ~/.ssh/known_hosts
+          ssh-keyscan pruebas.espoch.edu.ec >> ~/.ssh/known_hosts
       - name: "Subir artefacto a servidor"
         run: scp -r dist/ desarrollo2@pruebas.espoch.edu.ec:/home/desarrollo2/iu
