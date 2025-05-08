@@ -12,7 +12,7 @@ jobs:
   linter:
     # runs-on: ubuntu-latest
     runs-on: self-hosted #se ejecuta en el servidor
-    container: node:20 # Ejecuta dentro de un contenedor con Node 20
+    # container: node:20 # Ejecuta dentro de un contenedor con Node 20
 
     # strategy:
     #   matrix:
@@ -68,10 +68,10 @@ jobs:
     # container: node:20 # Ejecuta dentro de un contenedor con Node 20
 
     steps:
-      - name: "Listar artefactos disponibles en GitHub"
-        run: gh run list --repo ${{ github.repository }}
       - name: Autenticación GitHub (Si el repo es privado)
         run: echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN}}" >> $GITHUB_ENV
+      - name: "Listar artefactos disponibles en GitHub"
+        run: gh run list --repo ${{ github.repository }}
       - name: "Descargar artefacto"
         uses: actions/download-artifact@v4
         with:
