@@ -68,6 +68,8 @@ jobs:
     # container: node:20 # Ejecuta dentro de un contenedor con Node 20
 
     steps:
+      - name: Autenticación GitHub (Si el repo es privado)
+        run: echo "GITHUB_TOKEN=${{ secrets.TOKEN}}" >> $GITHUB_ENV
       - name: "Descargar artefacto"
         uses: actions/download-artifact@v4
         with:
