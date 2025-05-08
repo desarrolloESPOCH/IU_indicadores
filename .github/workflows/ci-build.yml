@@ -12,14 +12,10 @@ env:
 jobs:
   linter:
     runs-on: self-hosted
-    container: node:20
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: "Instalar CLI de Angular"
-        run: npm install -g @angular/cli@${{ env.ANGULAR_CLI_VERSION }}
 
       - name: "Instalar dependencias"
         run: npm install
@@ -54,5 +50,5 @@ jobs:
       - name: "Verificar archivos en el destino"
         run: ls -l /home/desarrollo2/iu/IU_Indicadores/dist/
 
-      - name: Reiniciar Nginx después del despliegue
-        run: sudo systemctl restart nginx
+      # - name: Reiniciar Nginx después del despliegue
+      #   run: sudo systemctl restart nginx
