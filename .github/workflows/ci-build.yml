@@ -2,7 +2,7 @@ name: "Flujo CI-Build"
 run-name: "CI-Build para ${{ github.event_name }} de ${{ github.actor }} en ${{ github.ref }}"
 
 on:
-  pull_request:
+  push:
     branches: ["main"]
     # types: [closed]
 
@@ -46,10 +46,10 @@ jobs:
         run: mkdir -p /home/desarrollo2/iu/IU_Indicadores/dist/
 
       - name: "Mover `dist` al destino final"
-        run: mv dist/iu-indicadores /home/desarrollo2/iu/IU_Indicadores/dist/
+        run: mv /__w/IU_indicadores/IU_indicadores/dist/ /home/desarrollo2/iu/IU_Indicadores/dist/
 
       - name: "Verificar archivos en el destino"
-        run: ls -l /home/desarrollo2/iu/IU_Indicadores/dist/
+        run: ls -la /home/desarrollo2/iu/IU_Indicadores/dist/
 
       # - name: Reiniciar Nginx después del despliegue
       #   run: sudo systemctl restart nginx
