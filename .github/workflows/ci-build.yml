@@ -77,7 +77,7 @@ jobs:
       - name: "Verificar archivos en el destino"
         run: ls -l /home/desarrollo2/iu/IU_Indicadores/dist
       - name: "Mover `dist` al destino final"
-        run: mv dist/iu_indicadores /home/desarrollo2/iu/IU_Indicadores/dist
+        run: mv /__w/IU_indicadores/IU_indicadores/dist/ /home/desarrollo2/iu/IU_Indicadores/dist
 
       - name: Reiniciar Nginx después del despliegue
         run: sudo systemctl restart nginx

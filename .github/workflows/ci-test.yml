@@ -1,8 +1,9 @@
 name: "Flujo CI-Test"
 run-name: "CI-Test para ${{ github.event_name }} de ${{ github.actor }} en ${{ github.ref }}"
 on:
-  pull_request:
-    branches: ["main"]
+  workflow_dispatch:
+#   pull_request:
+#     branches: ["main"]
 env:
   ANGULAR_CLI_VERSION: 19
 
