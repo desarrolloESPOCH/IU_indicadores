@@ -4,7 +4,7 @@ run-name: "CI-Build para ${{ github.event_name }} de ${{ github.actor }} en ${{ 
 on:
   pull_request:
     branches: ["main"]
-    types: [closed]
+    # types: [closed]
 env:
   ANGULAR_CLI_VERSION: 19
 
@@ -53,7 +53,7 @@ jobs:
       - name: "Instalar CLI de Angular"
         run: npm install -g @angular/cli@${{ env.ANGULAR_CLI_VERSION }}
       - name: "Instalar dependencias"
-        run: npm install
+        run: npm install --production
       - name: "Compilar Angular"
         run: ng build
       - name: "Guardar carpeta"
@@ -68,13 +68,17 @@ jobs:
     # container: node:20 # Ejecuta dentro de un contenedor con Node 20
 
     steps:
+      - name: "Listar artefactos disponibles en GitHub"
+        run: gh run list --repo ${{ github.repository }}
       - name: Autenticación GitHub (Si el repo es privado)
-        run: echo "GITHUB_TOKEN=${{ secrets.TOKEN}}" >> $GITHUB_ENV
+        run: echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN}}" >> $GITHUB_ENV
       - name: "Descargar artefacto"
         uses: actions/download-artifact@v4
         with:
           name: build
           path: dist/
+      - name: "Listar artefactos descargados"
+        run: ls -l dist
 
       - name: "Verificar archivos en el destino"
         run: ls -l /home/desarrollo2/iu/IU_Indicadores/dist
