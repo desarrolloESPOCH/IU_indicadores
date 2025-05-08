@@ -1,98 +1,58 @@
-# cspell:disable
 name: "Flujo CI-Build"
 run-name: "CI-Build para ${{ github.event_name }} de ${{ github.actor }} en ${{ github.ref }}"
+
 on:
   pull_request:
     branches: ["main"]
-    # types: [closed]
+    types: [closed]
+
 env:
   ANGULAR_CLI_VERSION: 19
 
 jobs:
   linter:
-    # runs-on: ubuntu-latest
-    runs-on: self-hosted #se ejecuta en el servidor
-    container: node:20 # Ejecuta dentro de un contenedor con Node 20
-
-    # strategy:
-    #   matrix:
-    #     node-version: [20.x]
+    runs-on: self-hosted
+    container: node:20
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # - name: Use Node.js ${{ matrix.node-version }}
-      #   uses: actions/setup-node@v4
-      # with:
-      #   node-version: ${{ matrix.node-version }}
-      #   cache: "npm"
+
       - name: "Instalar CLI de Angular"
         run: npm install -g @angular/cli@${{ env.ANGULAR_CLI_VERSION }}
+
       - name: "Instalar dependencias"
         run: npm install
+
       - name: "Ejecutar linter"
         run: npm run lint
+
   build:
     needs: linter
-    # runs-on: ubuntu-latest
-    runs-on: self-hosted #se ejecuta en el servidor
-    container: node:20 # Ejecuta dentro de un contenedor con Node 20
-
-    # strategy:
-    #   matrix:
-    #     node-version: [20.x]
+    runs-on: self-hosted
+    container: node:20
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # - name: Use Node.js ${{ matrix.node-version }}
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: ${{ matrix.node-version }}
-      #     cache: "npm"
+
       - name: "Instalar CLI de Angular"
         run: npm install -g @angular/cli@${{ env.ANGULAR_CLI_VERSION }}
-      - name: "Instalar dependencias"
-        run: npm install --production
-      - name: "Compilar Angular"
-        run: ng build
-      - name: "Guardar carpeta"
-        uses: actions/upload-artifact@v4
-        with:
-          name: build
-          path: dist/
-  deploy:
-    needs: build
-    # runs-on: ubuntu-latest
-    runs-on: self-hosted #se ejecuta en el servidor
-    # container: node:20 # Ejecuta dentro de un contenedor con Node 20
 
-    steps:
-      - name: "Listar artefactos disponibles en GitHub"
-        run: gh run list --repo ${{ github.repository }}
-      - name: Autenticación GitHub (Si el repo es privado)
-        run: echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN}}" >> $GITHUB_ENV
-      - name: "Descargar artefacto"
-        uses: actions/download-artifact@v4
-        with:
-          name: build
-          path: dist/
-      - name: "Listar artefactos descargados"
-        run: ls -l dist
+      - name: "Instalar dependencias"
+        run: npm install
+
+      - name: "Compilar Angular"
+        run: ng build --configuration=production
+
+      - name: "Crear carpeta destino si no existe"
+        run: mkdir -p /home/desarrollo2/iu/IU_Indicadores/dist/
+
+      - name: "Mover `dist` al destino final"
+        run: mv dist/iu-indicadores /home/desarrollo2/iu/IU_Indicadores/dist/
 
       - name: "Verificar archivos en el destino"
-        run: ls -l /home/desarrollo2/iu/IU_Indicadores/dist
-      - name: "Mover `dist` al destino final"
-        run: mv /__w/IU_indicadores/IU_indicadores/dist/ /home/desarrollo2/iu/IU_Indicadores/dist
+        run: ls -l /home/desarrollo2/iu/IU_Indicadores/dist/
 
       - name: Reiniciar Nginx después del despliegue
         run: sudo systemctl restart nginx
-
-      # - name: "Configurar SSH"
-      #   run: |
-      #     mkdir -p ~/.ssh
-      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-      #     chmod 600 ~/.ssh/id_rsa
-      #     ssh-keyscan pruebas.espoch.edu.ec >> ~/.ssh/known_hosts
-      # - name: "Subir artefacto a servidor"
-      #   run: scp -r dist/ desarrollo2@pruebas.espoch.edu.ec:/home/desarrollo2/iu
