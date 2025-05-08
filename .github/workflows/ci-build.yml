@@ -75,7 +75,7 @@ jobs:
           path: dist/
 
       - name: "Mover `dist` al destino final"
-        run: mv dist/IU_INDICADORES /home/desarrollo2/iu
+        run: mv dist/iu_indicadores /home/desarrollo2/iu/IU_Indicadores/dist
 
       - name: "Verificar archivos en el destino"
         run: ls -l /home/desarrollo2/iu
