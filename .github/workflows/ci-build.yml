@@ -12,8 +12,8 @@ env:
 jobs:
   linter:
     runs-on: self-hosted
-    # container:
-    # image: node:20
+    container:
+      image: node:20
 
     steps:
       - name: Checkout
