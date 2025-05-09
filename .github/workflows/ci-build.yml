@@ -34,7 +34,7 @@ jobs:
     runs-on: self-hosted
     container:
       image: node:20
-      options: --volume /home/desarrollo2/iu:/workspace
+      options: --volume /home/desarrollo2/iu/IU_Indicadores:/workspace
 
     steps:
       - name: Checkout
@@ -47,7 +47,7 @@ jobs:
         run: npm install
 
       - name: "Compilar Angular"
-        run: ng build --configuration=production --output-path=/workspace/
+        run: ng build --configuration=production --output-path=/workspace/browser
 
   deploy:
     needs: build
@@ -56,8 +56,8 @@ jobs:
     steps:
       - name: "Verificar archivos en volumen compartido"
         run: ls -l /home/desarrollo2/build_output/
-      - name: "Crear carpeta destino si no existe"
-        run: mkdir -p /home/desarrollo2/iu/IU_Indicadores/dist/
+      # - name: "Crear carpeta destino si no existe"
+      # run: mkdir -p /home/desarrollo2/iu/IU_Indicadores/dist/
 
       # - name: "Mover archivos al destino final"
       #   run: sudo mv /home/desarrollo2/build_output/iu_indicadores /home/desarrollo2/iu/IU_Indicadores/dist/
