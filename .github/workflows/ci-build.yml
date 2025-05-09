@@ -3,8 +3,7 @@ run-name: "CI-Build para ${{ github.event_name }} de ${{ github.actor }} en ${{ 
 
 on:
   pull_request:
-    branches: ["main"]
-    types: [closed]
+    branches: ["production"]
 
 env:
   ANGULAR_CLI_VERSION: 19
@@ -18,6 +17,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: "Instalar dependencias"
         run: npm install
@@ -35,6 +42,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: "Instalar CLI de Angular"
         run: npm install -g @angular/cli@${{ env.ANGULAR_CLI_VERSION }}
@@ -44,22 +58,3 @@ jobs:
 
       - name: "Compilar Angular"
         run: ng build --configuration=production --output-path=/workspace
-
-  # deploy:
-  # needs: build
-  # runs-on: self-hosted
-
-  # steps:
-  # - name: "Verificar archivos en volumen compartido"
-  # run: ls -l /home/desarrollo2/build_output/
-  # - name: "Crear carpeta destino si no existe"
-  # run: mkdir -p /home/desarrollo2/iu/IU_Indicadores/dist/
-
-  # - name: "Mover archivos al destino final"
-  #   run: sudo mv /home/desarrollo2/build_output/iu_indicadores /home/desarrollo2/iu/IU_Indicadores/dist/
-
-  # - name: "Verificar archivos en la nueva ubicación"
-  #   run: ls -l /home/desarrollo2/iu/IU_Indicadores/dist/
-
-  # - name: "Reiniciar Nginx después del despliegue"
-  #   run:  systemctl restart nginx
