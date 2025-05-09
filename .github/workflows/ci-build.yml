@@ -49,14 +49,13 @@ jobs:
       - name: "Compilar Angular"
         run: ng build --configuration=production --output-path=/workspace/iu_indicadores
 
-      - name: "Verificar archivos en volumen compartido"
-        run: ls -l /home/desarrollo2/build_output/
-
   deploy:
     needs: build
     runs-on: self-hosted
 
     steps:
+      - name: "Verificar archivos en volumen compartido"
+        run: ls -l /home/desarrollo2/build_output/
       - name: "Crear carpeta destino si no existe"
         run: mkdir -p /home/desarrollo2/iu/IU_Indicadores/dist/
 
@@ -66,5 +65,5 @@ jobs:
       - name: "Verificar archivos en la nueva ubicación"
         run: ls -l /home/desarrollo2/iu/IU_Indicadores/dist/
 
-      - name: "Reiniciar Nginx después del despliegue"
-        run: sudo systemctl restart nginx
+      # - name: "Reiniciar Nginx después del despliegue"
+      #   run:  systemctl restart nginx
