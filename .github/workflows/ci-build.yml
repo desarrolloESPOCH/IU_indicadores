@@ -34,7 +34,7 @@ jobs:
     runs-on: self-hosted
     container:
       image: node:20
-      options: --volume /home/desarrollo2/build_output:/workspace
+      options: --volume /home/desarrollo2/iu:/workspace
 
     steps:
       - name: Checkout
@@ -47,7 +47,7 @@ jobs:
         run: npm install
 
       - name: "Compilar Angular"
-        run: ng build --configuration=production --output-path=/workspace/iu_indicadores
+        run: ng build --configuration=production --output-path=/workspace/
 
   deploy:
     needs: build
@@ -59,11 +59,11 @@ jobs:
       - name: "Crear carpeta destino si no existe"
         run: mkdir -p /home/desarrollo2/iu/IU_Indicadores/dist/
 
-      - name: "Mover archivos al destino final"
-        run: sudo mv /home/desarrollo2/build_output/iu_indicadores /home/desarrollo2/iu/IU_Indicadores/dist/
+      # - name: "Mover archivos al destino final"
+      #   run: sudo mv /home/desarrollo2/build_output/iu_indicadores /home/desarrollo2/iu/IU_Indicadores/dist/
 
-      - name: "Verificar archivos en la nueva ubicación"
-        run: ls -l /home/desarrollo2/iu/IU_Indicadores/dist/
+      # - name: "Verificar archivos en la nueva ubicación"
+      #   run: ls -l /home/desarrollo2/iu/IU_Indicadores/dist/
 
       # - name: "Reiniciar Nginx después del despliegue"
       #   run:  systemctl restart nginx
