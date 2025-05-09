@@ -60,7 +60,7 @@ jobs:
         run: mkdir -p /home/desarrollo2/iu/IU_Indicadores/dist/
 
       - name: "Mover archivos al destino final"
-        run: mv /home/desarrollo2/build_output/iu_indicadores /home/desarrollo2/iu/IU_Indicadores/dist/
+        run: sudo mv /home/desarrollo2/build_output/iu_indicadores /home/desarrollo2/iu/IU_Indicadores/dist/
 
       - name: "Verificar archivos en la nueva ubicación"
         run: ls -l /home/desarrollo2/iu/IU_Indicadores/dist/
