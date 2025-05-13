@@ -126,7 +126,7 @@ export class CChartAniosComponent implements OnInit {
 
   select(value: any) {
     this.$nombrePeriodo.set(value!.element.index);
-    console.log(value.element.index);
+    // console.log(value.element.index);
     this.popover.hide();
     this.popover.show(event);
   }

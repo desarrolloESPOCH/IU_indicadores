@@ -32,13 +32,22 @@ export class CChartComponent implements OnInit {
   effectloader = effect(() => {
     this.$chart();
     this.$type();
-    this.initChart();
+    if (this.$indicador()) {
+      this.$periodos.set(
+        this.$indicador()!.periodos!.map((e) => e.codigoPeriodo),
+      );
+
+      this.$valores.set(this.$indicador()!.periodos!.map((e) => e.valor));
+
+      this.initChart();
+    }
   });
 
   @ViewChild('op') popover!: Popover;
 
   ngOnInit() {
     if (this.$indicador()) {
+      // console.log('indicador', this.$indicador()!.periodos!);
       this.$periodos.set(
         this.$indicador()!.periodos!.map((e) => e.codigoPeriodo),
       );
