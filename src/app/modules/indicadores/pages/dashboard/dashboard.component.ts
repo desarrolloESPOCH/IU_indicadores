@@ -97,6 +97,7 @@ export class DashboardComponent {
     request: () => this.$carrera(),
     loader: async ({ request }) => {
       const value = await this.swCarrera.getById(request);
+      // console.log('value', value);
       return value.data[0];
     },
   });
