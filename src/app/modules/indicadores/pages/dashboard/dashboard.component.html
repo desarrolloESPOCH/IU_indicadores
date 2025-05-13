@@ -33,6 +33,7 @@
         let i = $index;
         track indicador.titulo
       ) {
+        <!-- {{ indicador | json }} -->
         <app-c-chart
           [$indicador]="indicador"
           [$chart]="chartValue()"
@@ -72,15 +73,20 @@
 
   <br />
   @if ($carreraResource.hasValue()) {
-    <div class="grid grid-cols-1 md:grid-cols-3">
-      <app-c-table-resumen-indicadores
-        class="col-span-1 md:col-span-2"
-        [graduados]="$resumen()"
-      />
-      <app-c-table-resumen-graduados
-        class="col-span-1 md:col-span-1"
-        [graduados]="$TituladosResource.value()!.data"
-      />
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 px-5">
+      <div class="col-span-1 md:col-span-2 bg-gray-100 rounded-2xl">
+        <p class="text-2xl px-4 py-4">Resumen por periodos</p>
+        <app-c-table-resumen-indicadores [graduados]="$resumen()" />
+      </div>
+      <div class="col-span-1 md:col-span-1 bg-gray-100 rounded-2xl">
+        <p class="text-2xl px-4 py-4">
+          Resumen de número de graduados por años
+        </p>
+
+        <app-c-table-resumen-graduados
+          [graduados]="$TituladosResource.value()!.data"
+        />
+      </div>
     </div>
   }
 } @else {
