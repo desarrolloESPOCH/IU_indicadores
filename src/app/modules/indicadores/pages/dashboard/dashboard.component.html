@@ -1,3 +1,12 @@
+@if ($carreraResource.isLoading()) {
+  <div class="flex flex-col items-center justify-center h-screen">
+    <img src="./espoch2.png" width="35" alt="" />
+    <h1 class="text-3xl font-bold text-gray-600">
+      Cargando información de la carrera...
+    </h1>
+  </div>
+}
+
 @if ($carreraResource.hasValue()) {
   <div class="relative">
     <div
