@@ -1,4 +1,147 @@
+@if ($carreraResource.isLoading()) {
+  <div class="flex flex-col items-center justify-center h-screen">
+    <img src="./espoch2.png" width="35" alt="" />
+    <h1 class="text-3xl font-bold text-gray-600">
+      Cargando información de la carrera...
+    </h1>
+  </div>
+}
+
 @if ($carreraResource.hasValue()) {
+  <br /><br /><br />
+  <div class="card">
+    <p-tabs value="0" scrollable>
+      <p-tablist>
+        <ng-template #previcon>
+          <i class="pi pi-minus"></i>
+        </ng-template>
+        <p-tab value="0" class="flex items-center !gap-2 IndicadorAca">
+          <p-avatar
+            label="🧠"
+            [style]="{ 'background-color': '#dee9fc', color: '#1a2551' }"
+            shape="circle"
+          />
+          <span class="font-bold whitespace-nowrap"
+            >Indicadores Académicos</span
+          >
+        </p-tab>
+        <p-tab value="1" class="flex items-center !gap-2 IndicadorCal">
+          <p-avatar
+            label="🔝"
+            [style]="{ 'background-color': '#dee9fc', color: '#1a2551' }"
+            shape="circle"
+          />
+          <span class="font-bold whitespace-nowrap"
+            >Indicadores de Calidad</span
+          >
+        </p-tab>
+
+        <ng-template #nexticon>
+          <i class="pi pi-plus"></i>
+        </ng-template>
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel value="0">
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-10 pt-5 px-5 card max-w-[1920px] mx-auto"
+          >
+            @for (
+              indicador of $carreraResource.value().indicadores;
+              let i = $index;
+              track indicador.titulo
+            ) {
+              <!-- {{ indicador | json }} -->
+              <app-c-chart
+                [$indicador]="indicador"
+                [$chart]="chartValue()"
+                [$type]="1"
+                [$descripcionIndicador]="descripcionIndicadores()[i]"
+              />
+            }
+
+            @if ($TituladosResource.hasValue()) {
+              <!-- {{ $TituladosResource.value().data | json }} -->
+
+              <app-c-chart-anios
+                [$chart]="chartValue()"
+                [$indicador]="$TituladosResource.value().data"
+                [$descripcionIndicador]="descripcionIndicadores()[3]"
+              />
+            }
+            @if ($MatriculadosResource.hasValue()) {
+              <app-c-chart-periodos
+                [$chart]="chartValue()"
+                [$titulo]="'Número de matriculados'"
+                [$indicador]="$MatriculadosResource.value().data"
+                [$descripcionIndicador]="descripcionIndicadores()[4]"
+              />
+            }
+
+            @if ($AdmitidosResource.hasValue()) {
+              <app-c-chart-periodos
+                [$chart]="chartValue()"
+                [$titulo]="'Número de admitidos'"
+                [$indicador]="$AdmitidosResource.value().data"
+                [$descripcionIndicador]="descripcionIndicadores()[5]"
+              />
+            }
+          </div>
+
+          <br />
+          @if ($carreraResource.hasValue()) {
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div class="col-span-1 md:col-span-2 bg-gray-100 rounded-2xl">
+                <p class="text-2xl px-4 py-4">Resumen por periodos</p>
+                <app-c-table-resumen-indicadores [graduados]="$resumen()" />
+              </div>
+              <div class="col-span-1 md:col-span-1 bg-gray-100 rounded-2xl">
+                <p class="text-2xl px-4 py-4">
+                  Resumen de número de graduados por años
+                </p>
+                @if ($TituladosResource.hasValue()) {
+                  <app-c-table-resumen-graduados
+                    [graduados]="$TituladosResource.value()!.data || []"
+                  />
+                }
+              </div>
+            </div>
+          }
+        </p-tabpanel>
+        <p-tabpanel value="1">
+          <p class="m-0"></p>
+          <div
+            class="grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-3 gap-10 pt-5 px-5 card max-w-[1920px] mx-auto"
+          >
+            @for (
+              indicador of $CalidadData.value()?.data;
+              let i = $index;
+              track indicador.titulo
+            ) {
+              <!-- {{ indicador | json }} -->
+              <app-c-chart-calidad
+                [$indicador]="indicador"
+                [$chart]="chartValue()"
+                [$type]="1"
+                [$descripcionIndicador]="descripcionIndicadores()[i]"
+              />
+            } @empty {
+              <div
+                class="flex flex-col w-full items-center justify-center my-20 p-5"
+              >
+                <img src="./espoch2.png" width="35" alt="" />
+                <h1 class="text-3xl font-bold text-gray-600">
+                  No se encontraron resultados para la carrera
+                </h1>
+              </div>
+            }
+          </div>
+
+          <!-- {{ $CalidadData.value() | json }} -->
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </div>
+
   <div class="relative">
     <div
       class="fixed top-0 right-0 left-0 z-1000 py-2 bg-white text-gray-700 text-base font-bold text-center shadow-md"
@@ -16,7 +159,7 @@
             [(ngModel)]="selectedGrafica"
             optionLabel="name"
             placeholder="Seleccione el tipo de gráfico"
-            class="w-full md:w-56"
+            class="w-full md:w-56 tipo"
             [showClear]="true"
             changeOnBlur="true"
             (ngModelChange)="onChangeGrafica($event)"
@@ -24,65 +167,7 @@
         </div>
       </div>
     </div>
-
-    <div
-      class="my-12 grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-10 pt-5 px-5 card max-w-[1920px] mx-auto"
-    >
-      @for (
-        indicador of $carreraResource.value().indicadores;
-        let i = $index;
-        track indicador.titulo
-      ) {
-        <app-c-chart
-          [$indicador]="indicador"
-          [$chart]="chartValue()"
-          [$type]="1"
-          [$descripcionIndicador]="descripcionIndicadores()[i]"
-        />
-      }
-
-      @if ($TituladosResource.hasValue()) {
-        <!-- {{ $TituladosResource.value().data | json }} -->
-
-        <app-c-chart-anios
-          [$chart]="chartValue()"
-          [$indicador]="$TituladosResource.value().data"
-          [$descripcionIndicador]="descripcionIndicadores()[3]"
-        />
-      }
-      @if ($MatriculadosResource.hasValue()) {
-        <app-c-chart-periodos
-          [$chart]="chartValue()"
-          [$titulo]="'Número de matriculados'"
-          [$indicador]="$MatriculadosResource.value().data"
-          [$descripcionIndicador]="descripcionIndicadores()[4]"
-        />
-      }
-
-      @if ($AdmitidosResource.hasValue()) {
-        <app-c-chart-periodos
-          [$chart]="chartValue()"
-          [$titulo]="'Número de admitidos'"
-          [$indicador]="$AdmitidosResource.value().data"
-          [$descripcionIndicador]="descripcionIndicadores()[5]"
-        />
-      }
-    </div>
   </div>
-
-  <br />
-  @if ($carreraResource.hasValue()) {
-    <div class="grid grid-cols-1 md:grid-cols-3">
-      <app-c-table-resumen-indicadores
-        class="col-span-1 md:col-span-2"
-        [graduados]="$resumen()"
-      />
-      <app-c-table-resumen-graduados
-        class="col-span-1 md:col-span-1"
-        [graduados]="$TituladosResource.value()!.data"
-      />
-    </div>
-  }
 } @else {
   <div class="flex flex-col items-center justify-center h-screen">
     <img src="./espoch2.png" width="35" alt="" />

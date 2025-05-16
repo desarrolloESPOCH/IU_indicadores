@@ -1,33 +1,32 @@
 name: "Flujo CI-Test"
 run-name: "CI-Test para ${{ github.event_name }} de ${{ github.actor }} en ${{ github.ref }}"
 on:
-  workflow_dispatch:
-#   pull_request:
-#     branches: ["main"]
+  #   workflow_dispatch:
+  pull_request:
+    branches: ["dev"]
 env:
   ANGULAR_CLI_VERSION: 19
 
 jobs:
   linter:
-    # runs-on: ubuntu-latest
-    runs-on: self-hosted #se ejecuta en el servidor
-    container: node:20 # Ejecuta dentro de un contenedor con Node 20
-
-    # strategy:
-    #   matrix:
-    #     node-version: [20.x]
+    runs-on: self-hosted
+    container:
+      image: node:20
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      #   - name: Use Node.js ${{ matrix.node-version }}
-      #     uses: actions/setup-node@v4
-      #     with:
-      #       node-version: ${{ matrix.node-version }}
-      #       cache: "npm"
-      - name: "Instalar CLI de Angular"
-        run: npm install -g @angular/cli@${{ env.ANGULAR_CLI_VERSION }}
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: "Instalar dependencias"
         run: npm install
+
       - name: "Ejecutar linter"
         run: npm run lint

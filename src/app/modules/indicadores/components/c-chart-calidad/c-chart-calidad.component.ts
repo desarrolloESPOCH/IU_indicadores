@@ -8,34 +8,51 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
-import { INumeroGraduados } from '../../../shared/models/ICarrera.interfaces';
-import { Popover, PopoverModule } from 'primeng/popover';
+import { Popover } from 'primeng/popover';
+import { PopoverModule } from 'primeng/popover';
 import { AccordionModule } from 'primeng/accordion';
-import { ChartType } from '../c-chart/c-chart.component';
+import { IndicadoresCalidad } from '../../../shared/services/calidad.service';
 @Component({
-  selector: 'app-c-chart-anios',
+  selector: 'app-c-chart-calidad',
   imports: [ChartModule, PopoverModule, AccordionModule],
-  templateUrl: './c-chart-anios.component.html',
-  styleUrl: './c-chart-anios.component.css',
+  templateUrl: './c-chart-calidad.component.html',
+  styleUrl: './c-chart-calidad.component.css',
 })
-export class CChartAniosComponent implements OnInit {
-  $indicador = input.required<INumeroGraduados[]>();
+export class CChartCalidadComponent implements OnInit {
+  $indicador = input.required<IndicadoresCalidad>();
+  $chart = input<string>(ChartType.Bar);
+  $type = input<number>(1);
   $descripcionIndicador = input<string>('');
 
-  $anios = signal<number[]>([0]);
+  $periodos = signal<string[]>(['']);
   $valores = signal<number[]>([0]);
   $nombrePeriodo = signal<number>(0);
-  $chart = input<string>(ChartType.Bar);
+
+  // op = viewChild<ElementRef<HTMLButtonElement>>('op');
   effectloader = effect(() => {
     this.$chart();
+    this.$type();
+    if (this.$indicador()) {
+      this.$periodos.set(
+        this.$indicador()!.periodos!.map((e) => e.nombrePeriodo),
+      );
 
-    this.initChart();
+      this.$valores.set(this.$indicador()!.periodos!.map((e) => e.valor));
+
+      this.initChart();
+    }
   });
+
+  @ViewChild('op') popover!: Popover;
+
   ngOnInit() {
     if (this.$indicador()) {
-      this.$anios.set(this.$indicador().map((e) => e.Anio));
+      // console.log('indicador', this.$indicador()!.periodos!);
+      this.$periodos.set(
+        this.$indicador()!.periodos!.map((e) => e.nombrePeriodo),
+      );
 
-      this.$valores.set(this.$indicador().map((e) => e.NumeroGraduados));
+      this.$valores.set(this.$indicador()!.periodos!.map((e) => e.valor));
 
       this.initChart();
     }
@@ -58,10 +75,11 @@ export class CChartAniosComponent implements OnInit {
     );
 
     this.basicData = {
-      labels: this.$anios(),
+      labels: this.$periodos(),
       datasets: [
         {
           type: this.$chart(),
+
           data: [
             ...this.$valores(),
             // 10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
@@ -71,16 +89,22 @@ export class CChartAniosComponent implements OnInit {
             'rgba(6, 182, 212, 0.4)',
             'rgb(107, 114, 128, 0.4)',
             'rgba(139, 92, 246, 0.4)',
-            'rgba(34, 197, 94, 0.4)' /* Verde */,
             'rgba(244, 63, 94, 0.4)' /* Rojo */,
+            'rgba(34, 197, 94, 0.4)' /* Verde */,
+            'rgba(236, 72, 153, 0.4)' /* Rosa */,
+            'rgba(20, 184, 166, 0.4)' /* Turquesa */,
+            'rgba(168, 85, 247, 0.4)' /* Púrpura */,
           ],
           borderColor: [
             'rgb(249, 115, 22)',
             'rgb(6, 182, 212)',
             'rgb(107, 114, 128)',
             'rgb(139, 92, 246)',
-            'rgba(34, 197, 94 )' /* Verde */,
             'rgba(244, 63, 94)' /* Rojo */,
+            'rgba(34, 197, 94)' /* Verde */,
+            'rgba(236, 72, 153)' /* Rosa */,
+            'rgba(20, 184, 166)' /* Turquesa */,
+            'rgba(168, 85, 247)' /* Púrpura */,
           ],
           borderWidth: 1,
         },
@@ -119,15 +143,23 @@ export class CChartAniosComponent implements OnInit {
         },
       },
     };
-    // this.cd.markForCheck();
+    this.cd.markForCheck();
   }
-
-  @ViewChild('op') popover!: Popover;
 
   select(value: any) {
     this.$nombrePeriodo.set(value!.element.index);
-    // console.log(value.element.index);
     this.popover.hide();
     this.popover.show(event);
   }
+}
+
+export enum ChartType {
+  Bar = 'bar',
+  Line = 'line',
+  PolarArea = 'polarArea',
+  Radar = 'radar',
+  Doughnut = 'doughnut',
+  Pie = 'pie',
+  Bubble = 'bubble',
+  Scatter = 'scatter',
 }
