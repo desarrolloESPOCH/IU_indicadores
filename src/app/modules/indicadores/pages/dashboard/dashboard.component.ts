@@ -1,5 +1,6 @@
 // cspell:disable
 import {
+  AfterViewInit,
   Component,
   effect,
   inject,
@@ -18,6 +19,16 @@ import { CTableResumenIndicadoresComponent } from '../../components/c-table-resu
 import { CChartPeriodosComponent } from '../../components/c-chart-periodos/c-chart-periodos.component';
 import { Select } from 'primeng/select';
 import { CTableResumenGraduadosComponent } from '../../components/c-table-resumen-graduados/c-table-resumen-graduados.component';
+import { TabsModule } from 'primeng/tabs';
+import { BadgeModule } from 'primeng/badge';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+
+import { AvatarModule } from 'primeng/avatar';
+import { AvatarGroupModule } from 'primeng/avatargroup';
+import { CalidadService } from '../../../shared/services/calidad.service';
+// import { JsonPipe } from '@angular/common';
+import { CChartCalidadComponent } from '../../components/c-chart-calidad/c-chart-calidad.component';
+import { driver } from 'driver.js';
 @Component({
   selector: 'app-dashboard',
   imports: [
@@ -30,17 +41,24 @@ import { CTableResumenGraduadosComponent } from '../../components/c-table-resume
     CTableResumenIndicadoresComponent,
     CChartPeriodosComponent,
     CTableResumenGraduadosComponent,
+    TabsModule,
+    BadgeModule,
+    OverlayBadgeModule,
+    AvatarModule,
+    AvatarGroupModule,
+    CChartCalidadComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent {
+export class DashboardComponent implements AfterViewInit {
   private swCarrera = inject(CarreraService);
+  private swCalidad = inject(CalidadService);
   idCarrera = input.required<string>();
   graficos = signal<any[]>([
     { name: 'Barras', code: 'bar' },
     { name: 'Lineas', code: 'line' },
-    { name: 'Pastel', code: 'pie' },
+    // { name: 'Pastel', code: 'pie' },
     { name: 'Radar', code: 'radar' },
   ]);
 
@@ -74,10 +92,10 @@ export class DashboardComponent {
     const C = this.$AdmitidosResource.value()?.data;
 
     return A.map((itemA: any) => {
-      const itemB = B!.find(
+      const itemB = B?.find(
         (itemB) => itemB.codPeriodo === itemA.codigoPeriodo,
       );
-      const itemC = C!.find(
+      const itemC = C?.find(
         (itemC) => itemC.codPeriodo === itemA.codigoPeriodo,
       );
 
@@ -117,4 +135,62 @@ export class DashboardComponent {
     request: () => this.$carrera(),
     loader: ({ request }) => this.swCarrera.getAdmitidosPorPeriodos(request),
   });
+
+  $CalidadData = resource({
+    request: () => this.$carrera(),
+    loader: ({ request }) => this.swCalidad.getAll(request),
+  });
+
+  ngAfterViewInit(): void {
+    const driverObj = driver({
+      nextBtnText: 'Siguiente',
+      prevBtnText: 'Anterior',
+      doneBtnText: 'Listo',
+      showProgress: true,
+      steps: [
+        {
+          element: '#title',
+          popover: {
+            title: 'Bienvenido al Dashboard',
+            description: ' A continuacion se mostrara un tour por el dashboard',
+            side: 'left',
+            align: 'start',
+          },
+        },
+        {
+          element: '.IndicadorAca',
+          popover: {
+            title: 'Indicadores Academicos',
+            description: 'Informacion de Indicadores Academicos',
+            side: 'left',
+            align: 'start',
+          },
+        },
+        {
+          element: '.IndicadorCal',
+          popover: {
+            title: 'Indicadores de Calidad',
+            description: 'Informacion de Indicadores de Calidad',
+            side: 'left',
+            align: 'start',
+          },
+        },
+        {
+          element: '.tipo',
+          popover: {
+            title: 'Tipo de Grafica',
+            description: 'Puede seleccionar el tipo de grafica',
+            side: 'left',
+            align: 'start',
+          },
+        },
+      ],
+    });
+    if (localStorage.getItem('tour')) {
+      console.log('tour', localStorage.getItem('tour'));
+    } else {
+      localStorage.setItem('tour', 'true');
+      driverObj.drive();
+    }
+  }
 }
