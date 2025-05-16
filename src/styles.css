@@ -1,3 +1,9 @@
 @import "tailwindcss";
 @import "primeicons/primeicons.css";
 @import "driver.js/dist/driver.css";
+
+/* * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+} */
