@@ -85,15 +85,18 @@ export class CChartComponent implements OnInit {
             // 10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
           ],
           backgroundColor: [
-            'rgba(249, 115, 22, 0.4)',
-            'rgba(6, 182, 212, 0.4)',
-            'rgb(107, 114, 128, 0.4)',
-            'rgba(139, 92, 246, 0.4)',
-            'rgba(244, 63, 94, 0.4)' /* Rojo */,
-            'rgba(34, 197, 94, 0.4)' /* Verde */,
-            'rgba(236, 72, 153, 0.4)' /* Rosa */,
-            'rgba(20, 184, 166, 0.4)' /* Turquesa */,
-            'rgba(168, 85, 247, 0.4)' /* Púrpura */,
+            'rgba(255, 255, 255, 0.1)',
+
+            // 'rgba(249, 115, 22, 0.4)',
+            // 'rgba(6, 182, 212, 0.4)',
+            // 'rgb(107, 114, 128, 0.4)',
+            // 'rgba(139, 92, 246, 0.4)',
+            // 'rgba(244, 63, 94, 0.4)' /* Rojo */,
+            // 'rgba(34, 197, 94, 0.4)' /* Verde */,
+            // 'rgba(236, 72, 153, 0.4)' /* Rosa */,
+            // 'rgba(20, 184, 166, 0.4)' /* Turquesa */,
+            // 'rgba(168, 85, 247, 0.4)' /* Púrpura */,
+            // 'rgba(234, 179, 8,0.4)', // Amarillo mostaza
           ],
           borderColor: [
             'rgb(249, 115, 22)',
@@ -105,6 +108,7 @@ export class CChartComponent implements OnInit {
             'rgba(236, 72, 153)' /* Rosa */,
             'rgba(20, 184, 166)' /* Turquesa */,
             'rgba(168, 85, 247)' /* Púrpura */,
+            'rgba(234, 179, 8)', // Amarillo mostaza
           ],
           borderWidth: 1,
         },

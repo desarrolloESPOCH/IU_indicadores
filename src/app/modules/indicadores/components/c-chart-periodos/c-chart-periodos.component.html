@@ -4,8 +4,8 @@
       <p-accordion value="1">
         <p-accordion-panel value="0">
           <p-accordion-header>
-            <h1 class="text-3xl font-bold text-gray-600">
-              {{ $titulo() }}
+            <h1 class="text-2xl font-bold text-gray-600">
+              {{ $titulo().toUpperCase() }}
               <i class="pi pi-info-circle text-blue-400"></i></h1
           ></p-accordion-header>
           <p-accordion-content>
@@ -32,7 +32,7 @@
       <div>
         <span
           class="font-medium text-surface-900 dark:text-surface-0 block mb-2"
-          >Periodo:
+          >PERIODO:
           {{ $indicador()[$nombrePeriodo()].descripcion }}
         </span>
         <span

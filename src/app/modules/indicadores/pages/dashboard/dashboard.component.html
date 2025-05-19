@@ -85,14 +85,23 @@
         <br />
         @if ($carreraResource.hasValue()) {
           <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-            <div class="col-span-1 md:col-span-2 bg-gray-100 rounded-2xl">
-              <p class="text-2xl px-4 py-4">Resumen por periodos</p>
+            <div
+              class="col-span-1 md:col-span-2 rounded-2xl border-gray-100 border-1 bg-linear-to-tr from-gray-50 to-gray-50"
+            >
+              <span
+                class="font-medium text-surface-900 dark:text-surface-0 block mx-auto my-2 text-center"
+                >RESUMEN POR PERIODOS</span
+              >
               <app-c-table-resumen-indicadores [graduados]="$resumen()" />
             </div>
-            <div class="col-span-1 md:col-span-1 bg-gray-100 rounded-2xl">
-              <p class="text-2xl px-4 py-4">
-                Resumen de número de graduados por años
-              </p>
+            <div
+              class="col-span-1 md:col-span-1 primary rounded-2xl border-gray-100 border-1 bg-linear-to-tr from-gray-50 to-gray-50"
+            >
+              <span
+                class="font-medium text-surface-900 dark:text-surface-0 block mx-auto my-2 text-center"
+              >
+                RESUMEN DE NÚMERO DE GRADUADOS POR AÑOS
+              </span>
               @if ($TituladosResource.hasValue()) {
                 <app-c-table-resumen-graduados
                   [graduados]="$TituladosResource.value()!.data || []"
@@ -116,7 +125,7 @@
               [$indicador]="indicador"
               [$chart]="chartValue()"
               [$type]="1"
-              [$descripcionIndicador]="descripcionIndicadores()[i]"
+              [$descripcionIndicador]="indicador.descripcion"
             />
           } @empty {
             <div
@@ -143,7 +152,9 @@
         <div class="flex items-center">
           <img src="./espoch2.png" width="35" alt="" />
           <div class="mx-5">
-            {{ $carreraResource.value().nombreCarrera }}
+            <h1 class="text-2xl">
+              {{ $carreraResource.value().nombreCarrera }}
+            </h1>
           </div>
         </div>
         <div class="card flex justify-center mx-5">

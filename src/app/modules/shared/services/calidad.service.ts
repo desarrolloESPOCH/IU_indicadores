@@ -24,4 +24,5 @@ export interface IndicadoresCalidad {
   titulo: string;
   idIndicador: number;
   periodos: Periodo[];
+  descripcion: string;
 }
