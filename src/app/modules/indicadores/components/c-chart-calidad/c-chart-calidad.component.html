@@ -5,12 +5,12 @@
         <p-accordion-panel value="0">
           <p-accordion-header>
             <h1 class="text-2xl font-bold text-gray-600">
-              {{ $indicador().titulo }}
+              {{ $indicador().titulo.toUpperCase() }}
               <i class="pi pi-info-circle text-blue-400"></i></h1
           ></p-accordion-header>
           <p-accordion-content>
             <p class="m-0">
-              <!-- {{ $descripcionIndicador() }} -->
+              {{ $descripcionIndicador() }}
             </p>
           </p-accordion-content>
         </p-accordion-panel>
@@ -36,14 +36,24 @@
         > -->
         <span
           class="font-medium text-surface-900 dark:text-surface-0 block mb-2"
-          >Periodo:
-          {{ $indicador().periodos[$nombrePeriodo()].nombrePeriodo }}</span
-        >
+          >PERIODO:
+          <p-tag
+            [severity]="
+              this.getTagSeverity($indicador().periodos[$nombrePeriodo()].valor)
+            "
+            value=" {{ $indicador().periodos[$nombrePeriodo()].nombrePeriodo }}"
+          />
+        </span>
         <span
           class="font-medium text-surface-900 dark:text-surface-0 block mb-2"
         >
-          {{ $indicador().titulo }}
-          {{ $indicador().periodos[$nombrePeriodo()].valor }} %
+          {{ $indicador().titulo }}:
+          <p-tag
+            [severity]="
+              getTagSeverity($indicador().periodos[$nombrePeriodo()].valor)
+            "
+            value=" {{ $indicador().periodos[$nombrePeriodo()].valor }} %"
+          />
         </span>
       </div>
     </div>

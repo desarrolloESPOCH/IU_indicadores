@@ -151,8 +151,8 @@ export class DashboardComponent implements AfterViewInit {
         {
           element: '#title',
           popover: {
-            title: 'Bienvenido al Dashboard',
-            description: ' A continuacion se mostrara un tour por el dashboard',
+            title: 'Bienvenido',
+            description: ' A continuación se mostrará un tour por el dashboard',
             side: 'left',
             align: 'start',
           },
@@ -160,8 +160,8 @@ export class DashboardComponent implements AfterViewInit {
         {
           element: '.IndicadorAca',
           popover: {
-            title: 'Indicadores Academicos',
-            description: 'Informacion de Indicadores Academicos',
+            title: 'Indicadores Académicos',
+            description: 'Actualmente se tienen 6 Indicadores Académicos',
             side: 'left',
             align: 'start',
           },
@@ -170,7 +170,7 @@ export class DashboardComponent implements AfterViewInit {
           element: '.IndicadorCal',
           popover: {
             title: 'Indicadores de Calidad',
-            description: 'Informacion de Indicadores de Calidad',
+            description: 'Información de 33 Indicadores de Calidad',
             side: 'left',
             align: 'start',
           },
@@ -178,17 +178,16 @@ export class DashboardComponent implements AfterViewInit {
         {
           element: '.tipo',
           popover: {
-            title: 'Tipo de Grafica',
-            description: 'Puede seleccionar el tipo de grafica',
+            title: 'Tipo de Gráfica',
+            description:
+              'Puede seleccionar el tipo de gráfica que desea visualizar',
             side: 'left',
             align: 'start',
           },
         },
       ],
     });
-    if (localStorage.getItem('tour')) {
-      console.log('tour', localStorage.getItem('tour'));
-    } else {
+    if (!localStorage.getItem('tour')) {
       localStorage.setItem('tour', 'true');
       driverObj.drive();
     }
