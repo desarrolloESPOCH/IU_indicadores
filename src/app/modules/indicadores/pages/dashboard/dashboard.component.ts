@@ -29,6 +29,7 @@ import { CalidadService } from '../../../shared/services/calidad.service';
 // import { JsonPipe } from '@angular/common';
 import { CChartCalidadComponent } from '../../components/c-chart-calidad/c-chart-calidad.component';
 import { driver } from 'driver.js';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 @Component({
   selector: 'app-dashboard',
   imports: [
@@ -47,6 +48,7 @@ import { driver } from 'driver.js';
     AvatarModule,
     AvatarGroupModule,
     CChartCalidadComponent,
+    ProgressSpinnerModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',

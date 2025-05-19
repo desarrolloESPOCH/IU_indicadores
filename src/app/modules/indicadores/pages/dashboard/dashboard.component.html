@@ -1,9 +1,13 @@
 @if ($carreraResource.isLoading()) {
-  <div class="flex flex-col items-center justify-center h-screen">
+  <div class="flex flex-col items-center justify-center h-screen mx-auto p-2">
     <img src="./espoch2.png" width="35" alt="sello de espoch" />
-    <h1 class="text-3xl font-bold text-gray-600">
-      Cargando información de la carrera...ss
-    </h1>
+    <h1 class="text-3xl font-bold text-gray-600">Cargando información...</h1>
+    <p-progress-spinner
+      strokeWidth="8"
+      fill="transparent"
+      animationDuration=".5s"
+      [style]="{ width: '50px', height: '50px' }"
+    />
   </div>
 }
 
