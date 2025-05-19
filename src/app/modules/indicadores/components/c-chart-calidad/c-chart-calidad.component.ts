@@ -12,9 +12,11 @@ import { Popover } from 'primeng/popover';
 import { PopoverModule } from 'primeng/popover';
 import { AccordionModule } from 'primeng/accordion';
 import { IndicadoresCalidad } from '../../../shared/services/calidad.service';
+import { TagModule } from 'primeng/tag';
+import { getTagSeverity } from '../../../shared/utils/umbrales';
 @Component({
   selector: 'app-c-chart-calidad',
-  imports: [ChartModule, PopoverModule, AccordionModule],
+  imports: [ChartModule, PopoverModule, AccordionModule, TagModule],
   templateUrl: './c-chart-calidad.component.html',
   styleUrl: './c-chart-calidad.component.css',
 })
@@ -27,7 +29,7 @@ export class CChartCalidadComponent implements OnInit {
   $periodos = signal<string[]>(['']);
   $valores = signal<number[]>([0]);
   $nombrePeriodo = signal<number>(0);
-
+  getTagSeverity = getTagSeverity;
   // op = viewChild<ElementRef<HTMLButtonElement>>('op');
   effectloader = effect(() => {
     this.$chart();
@@ -47,7 +49,6 @@ export class CChartCalidadComponent implements OnInit {
 
   ngOnInit() {
     if (this.$indicador()) {
-      // console.log('indicador', this.$indicador()!.periodos!);
       this.$periodos.set(
         this.$indicador()!.periodos!.map((e) => e.nombrePeriodo),
       );
@@ -85,15 +86,16 @@ export class CChartCalidadComponent implements OnInit {
             // 10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
           ],
           backgroundColor: [
-            'rgba(249, 115, 22, 0.4)',
-            'rgba(6, 182, 212, 0.4)',
-            'rgb(107, 114, 128, 0.4)',
-            'rgba(139, 92, 246, 0.4)',
-            'rgba(244, 63, 94, 0.4)' /* Rojo */,
-            'rgba(34, 197, 94, 0.4)' /* Verde */,
-            'rgba(236, 72, 153, 0.4)' /* Rosa */,
-            'rgba(20, 184, 166, 0.4)' /* Turquesa */,
-            'rgba(168, 85, 247, 0.4)' /* Púrpura */,
+            'rgba(255, 255, 255, 0.1)',
+            // 'rgba(6, 182, 212, 0.4)',
+            // 'rgb(107, 114, 128, 0.4)',
+            // 'rgba(139, 92, 246, 0.4)',
+            // 'rgba(244, 63, 94, 0.4)' /* Rojo */,
+            // 'rgba(34, 197, 94, 0.4)' /* Verde */,
+            // 'rgba(236, 72, 153, 0.4)' /* Rosa */,
+            // 'rgba(20, 184, 166, 0.4)' /* Turquesa */,
+            // 'rgba(168, 85, 247, 0.4)' /* Púrpura */,
+            // 'rgba(234, 179, 8,0.4)', // Amarillo mostaza
           ],
           borderColor: [
             'rgb(249, 115, 22)',
@@ -105,6 +107,7 @@ export class CChartCalidadComponent implements OnInit {
             'rgba(236, 72, 153)' /* Rosa */,
             'rgba(20, 184, 166)' /* Turquesa */,
             'rgba(168, 85, 247)' /* Púrpura */,
+            'rgba(234, 179, 8)', // Amarillo mostaza
           ],
           borderWidth: 1,
         },
