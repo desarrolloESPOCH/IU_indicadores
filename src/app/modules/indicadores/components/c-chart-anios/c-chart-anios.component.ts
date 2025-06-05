@@ -58,15 +58,6 @@ export class CChartAniosComponent implements OnInit {
   constructor(private cd: ChangeDetectorRef) {}
 
   initChart() {
-    const documentStyle = getComputedStyle(document.documentElement);
-    // const textColor = documentStyle.getPropertyValue('--p-text-color');
-    const textColorSecondary = documentStyle.getPropertyValue(
-      '--p-text-muted-color',
-    );
-    const surfaceBorder = documentStyle.getPropertyValue(
-      '--p-content-border-color',
-    );
-
     this.basicData = {
       labels: this.$anios(),
       datasets: [
@@ -123,13 +114,15 @@ export class CChartAniosComponent implements OnInit {
 
     this.basicOptions = {
       plugins: {
-        colors: {
-          // forceOverride: true,
-        },
+        colors: {},
         legend: {
           display: this.$chart() == 'line' ? true : false,
           labels: {
-            // color: textColor,
+            // Filtramos para que solo muestre leyendas de datasets que tengan label definido y no vacío
+            filter: function (item: any) {
+              // Si el label es undefined, null o cadena vacía, no mostrar
+              return !!item.text && item.text.trim() !== '';
+            },
           },
           onClick: (e: any, legendItem: any) => {
             if (
@@ -139,10 +132,6 @@ export class CChartAniosComponent implements OnInit {
               this.mostrarLeyenda.set(!this.mostrarLeyenda());
 
               this.initChart();
-              console.log(
-                '¡Hiciste clic en la leyenda de la línea de tendencia!',
-                this.mostrarLeyenda(),
-              );
             }
           },
         },
@@ -150,24 +139,32 @@ export class CChartAniosComponent implements OnInit {
       scales: {
         x: {
           ticks: {
-            color: textColorSecondary,
+            color: getComputedStyle(document.documentElement).getPropertyValue(
+              '--p-text-muted-color',
+            ),
           },
           grid: {
-            color: surfaceBorder,
+            color: getComputedStyle(document.documentElement).getPropertyValue(
+              '--p-content-border-color',
+            ),
           },
         },
         y: {
           beginAtZero: true,
           ticks: {
-            color: textColorSecondary,
+            color: getComputedStyle(document.documentElement).getPropertyValue(
+              '--p-text-muted-color',
+            ),
           },
           grid: {
-            color: surfaceBorder,
+            color: getComputedStyle(document.documentElement).getPropertyValue(
+              '--p-content-border-color',
+            ),
           },
         },
       },
     };
-    // this.cd.markForCheck();
+    this.cd.markForCheck();
   }
 
   @ViewChild('op') popover!: Popover;
