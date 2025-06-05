@@ -29,7 +29,9 @@ export class CChartAniosComponent implements OnInit {
   $nombrePeriodo = signal<number>(0);
   $chart = input<string>(ChartType.Bar);
   lineaTendencia: number[] = [];
-
+  m = 0;
+  mostrarLeyenda = signal(false);
+  b = 0;
   effectloader = effect(() => {
     this.$chart();
 
@@ -40,7 +42,10 @@ export class CChartAniosComponent implements OnInit {
       this.$anios.set(this.$indicador().map((e) => e.Anio));
 
       this.$valores.set(this.$indicador().map((e) => e.NumeroGraduados));
-      this.lineaTendencia = calcularLineaTendencia(this.$valores());
+      const { lineaTendencia, m, b } = calcularLineaTendencia(this.$valores());
+      this.lineaTendencia = lineaTendencia;
+      this.m = m;
+      this.b = b;
 
       this.initChart();
     }
@@ -66,7 +71,7 @@ export class CChartAniosComponent implements OnInit {
       labels: this.$anios(),
       datasets: [
         {
-          label: 'Ver Datos',
+          label: '',
           type: this.$chart(),
           data: [
             ...this.$valores(),
@@ -99,7 +104,9 @@ export class CChartAniosComponent implements OnInit {
         ...(this.$chart() === 'line'
           ? [
               {
-                label: 'Ver Línea de Tendencia (fórmula: y = m · x + b)',
+                label: !this.mostrarLeyenda()
+                  ? `Línea de Tendencia (fórmula: y = (${this.m.toFixed(2)}) · x + (${this.b.toFixed(2)}))`
+                  : 'Ver Línea de Tendencia',
                 data: this.lineaTendencia,
                 type: 'line',
                 borderColor: '#FF6384',
@@ -107,6 +114,7 @@ export class CChartAniosComponent implements OnInit {
                 fill: false,
                 pointRadius: 0, // Sin puntos en la línea de tendencia
                 tension: 0.4, // Suaviza la línea, opcional
+                hidden: this.mostrarLeyenda(),
               },
             ]
           : []),
@@ -119,9 +127,23 @@ export class CChartAniosComponent implements OnInit {
           // forceOverride: true,
         },
         legend: {
-          display: true,
+          display: this.$chart() == 'line' ? true : false,
           labels: {
             // color: textColor,
+          },
+          onClick: (e: any, legendItem: any) => {
+            if (
+              legendItem.text.startsWith('Línea de Tendencia') ||
+              legendItem.text.startsWith('Ver Línea de Tendencia')
+            ) {
+              this.mostrarLeyenda.set(!this.mostrarLeyenda());
+
+              this.initChart();
+              console.log(
+                '¡Hiciste clic en la leyenda de la línea de tendencia!',
+                this.mostrarLeyenda(),
+              );
+            }
           },
         },
       },
