@@ -58,8 +58,8 @@ export class DashboardComponent implements AfterViewInit {
   private swCalidad = inject(CalidadService);
   idCarrera = input.required<string>();
   graficos = signal<any[]>([
-    { name: 'Barras', code: 'bar' },
     { name: 'Lineas', code: 'line' },
+    { name: 'Barras', code: 'bar' },
     // { name: 'Pastel', code: 'pie' },
     { name: 'Radar', code: 'radar' },
   ]);
