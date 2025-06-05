@@ -100,7 +100,7 @@ export class CChartPeriodosComponent implements OnInit {
         ...(this.$chart() === 'line'
           ? [
               {
-                label: 'Ver Línea de Tendencia',
+                label: 'Ver Línea de Tendencia (fórmula: y = m · x + b)',
                 data: this.lineaTendencia,
                 type: 'line',
                 borderColor: '#FF6384',
