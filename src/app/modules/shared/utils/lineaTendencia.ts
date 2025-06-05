@@ -22,6 +22,10 @@ export const calcularLineaTendencia = (datos: number[]) => {
   for (let i = 0; i < n; i++) {
     lineaTendencia.push(m * i + b);
   }
-
-  return lineaTendencia;
+  // Devuelvo también los valores de m y b junto con la línea de tendencia
+  return {
+    lineaTendencia,
+    m,
+    b,
+  };
 };
