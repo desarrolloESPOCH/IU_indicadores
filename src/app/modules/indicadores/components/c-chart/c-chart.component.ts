@@ -74,28 +74,16 @@ export class CChartComponent implements OnInit {
   constructor(private cd: ChangeDetectorRef) {}
 
   initChart() {
-    const documentStyle = getComputedStyle(document.documentElement);
-    // Cambiar el tamaño del texto de la leyenda
-    // Puedes ajustar el valor de font.size según lo que necesites (por ejemplo, 18)
-    // const textColor = documentStyle.getPropertyValue('--p-text-color');
-    const textColorSecondary = documentStyle.getPropertyValue(
-      '--p-text-muted-color',
-    );
-    const surfaceBorder = documentStyle.getPropertyValue(
-      '--p-content-border-color',
-    );
-
     this.basicData = {
       labels: this.$periodos(),
       datasets: [
         {
-          // label: this.$indicador().titulo || 'datos',
-          label: '',
+          // No ponemos 'label' para que no aparezca en la leyenda
+          //slabel: '',
           type: this.$chart(),
           legend: {
             display: false,
           },
-
           data: [
             ...this.$valores(),
             // 10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
@@ -151,16 +139,18 @@ export class CChartComponent implements OnInit {
       ],
     };
 
+    // Ahora, en la configuración de la leyenda, filtramos para que no muestre la leyenda del primer dataset
     this.basicOptions = {
       plugins: {
-        colors: {
-          // forceOverride: true,
-        },
+        colors: {},
         legend: {
           display: this.$chart() == 'line' ? true : false,
-
           labels: {
-            // color: textColor,
+            // Filtramos para que solo muestre leyendas de datasets que tengan label definido y no vacío
+            filter: function (item: any) {
+              // Si el label es undefined, null o cadena vacía, no mostrar
+              return !!item.text && item.text.trim() !== '';
+            },
           },
           onClick: (e: any, legendItem: any) => {
             if (
@@ -169,10 +159,6 @@ export class CChartComponent implements OnInit {
             ) {
               this.mostrarLeyenda = !this.mostrarLeyenda;
 
-              console.log(
-                '¡Hiciste clic en la leyenda de la línea de tendencia!',
-                this.mostrarLeyenda,
-              );
               this.initChart();
             }
           },
@@ -181,23 +167,79 @@ export class CChartComponent implements OnInit {
       scales: {
         x: {
           ticks: {
-            color: textColorSecondary,
+            color: getComputedStyle(document.documentElement).getPropertyValue(
+              '--p-text-muted-color',
+            ),
           },
           grid: {
-            color: surfaceBorder,
+            color: getComputedStyle(document.documentElement).getPropertyValue(
+              '--p-content-border-color',
+            ),
           },
         },
         y: {
           beginAtZero: true,
           ticks: {
-            color: textColorSecondary,
+            color: getComputedStyle(document.documentElement).getPropertyValue(
+              '--p-text-muted-color',
+            ),
           },
           grid: {
-            color: surfaceBorder,
+            color: getComputedStyle(document.documentElement).getPropertyValue(
+              '--p-content-border-color',
+            ),
           },
         },
       },
     };
+
+    // this.basicOptions = {
+    //   plugins: {
+    //     colors: {
+    //       // forceOverride: true,
+    //     },
+    //     legend: {
+    //       display: this.$chart() == 'line' ? true : false,
+
+    //       labels: {
+    //         // color: textColor,
+    //       },
+    //       onClick: (e: any, legendItem: any) => {
+    //         if (
+    //           legendItem.text.startsWith('Línea de Tendencia') ||
+    //           legendItem.text.startsWith('Ver Línea de Tendencia')
+    //         ) {
+    //           this.mostrarLeyenda = !this.mostrarLeyenda;
+
+    //           console.log(
+    //             '¡Hiciste clic en la leyenda de la línea de tendencia!',
+    //             this.mostrarLeyenda,
+    //           );
+    //           this.initChart();
+    //         }
+    //       },
+    //     },
+    //   },
+    //   scales: {
+    //     x: {
+    //       ticks: {
+    //         color: textColorSecondary,
+    //       },
+    //       grid: {
+    //         color: surfaceBorder,
+    //       },
+    //     },
+    //     y: {
+    //       beginAtZero: true,
+    //       ticks: {
+    //         color: textColorSecondary,
+    //       },
+    //       grid: {
+    //         color: surfaceBorder,
+    //       },
+    //     },
+    //   },
+    // };
     this.cd.markForCheck();
   }
 
