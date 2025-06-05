@@ -33,6 +33,10 @@ export class CChartCalidadComponent implements OnInit {
   $nombrePeriodo = signal<number>(0);
   getTagSeverity = getTagSeverity;
   lineaTendencia: number[] = [];
+  m = 0;
+  b = 0;
+  mostrarLeyenda = false;
+
   // op = viewChild<ElementRef<HTMLButtonElement>>('op');
   effectloader = effect(() => {
     this.$chart();
@@ -58,7 +62,10 @@ export class CChartCalidadComponent implements OnInit {
 
       this.$valores.set(this.$indicador()!.periodos!.map((e) => e.valor));
 
-      this.lineaTendencia = calcularLineaTendencia(this.$valores());
+      const { lineaTendencia, m, b } = calcularLineaTendencia(this.$valores());
+      this.lineaTendencia = lineaTendencia;
+      this.m = m;
+      this.b = b;
 
       this.initChart();
     }
@@ -84,7 +91,7 @@ export class CChartCalidadComponent implements OnInit {
       labels: this.$periodos(),
       datasets: [
         {
-          label: 'Ver Datos',
+          label: '',
           type: this.$chart(),
 
           data: [
@@ -122,7 +129,9 @@ export class CChartCalidadComponent implements OnInit {
         ...(this.$chart() === 'line'
           ? [
               {
-                label: 'Ver Línea de Tendencia (fórmula: y = m · x + b)',
+                label: !this.mostrarLeyenda
+                  ? `Línea de Tendencia (fórmula: y = (${this.m.toFixed(2)}) · x + (${this.b.toFixed(2)}))`
+                  : 'Ver Línea de Tendencia',
                 data: this.lineaTendencia,
                 type: 'line',
                 //borderColor: '#22c55e', // Verde
@@ -132,6 +141,7 @@ export class CChartCalidadComponent implements OnInit {
                 fill: false,
                 pointRadius: 0, // Sin puntos en la línea de tendencia
                 tension: 0.4, // Suaviza la línea, opcional
+                hidden: this.mostrarLeyenda,
               },
             ]
           : []),
@@ -144,9 +154,24 @@ export class CChartCalidadComponent implements OnInit {
           // forceOverride: true,
         },
         legend: {
-          display: true,
+          display: this.$chart() == 'line' ? true : false,
+
           labels: {
             // color: textColor,
+          },
+          onClick: (e: any, legendItem: any) => {
+            if (
+              legendItem.text.startsWith('Línea de Tendencia') ||
+              legendItem.text.startsWith('Ver Línea de Tendencia')
+            ) {
+              this.mostrarLeyenda = !this.mostrarLeyenda;
+
+              console.log(
+                '¡Hiciste clic en la leyenda de la línea de tendencia!',
+                this.mostrarLeyenda,
+              );
+              this.initChart();
+            }
           },
         },
       },

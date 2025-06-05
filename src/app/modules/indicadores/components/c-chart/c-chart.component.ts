@@ -29,6 +29,9 @@ export class CChartComponent implements OnInit {
   $valores = signal<number[]>([0]);
   $nombrePeriodo = signal<number>(0);
   lineaTendencia: number[] = [];
+  m = 0;
+  b = 0;
+  mostrarLeyenda = false;
 
   // op = viewChild<ElementRef<HTMLButtonElement>>('op');
   effectloader = effect(() => {
@@ -56,7 +59,10 @@ export class CChartComponent implements OnInit {
 
       this.$valores.set(this.$indicador()!.periodos!.map((e) => e.valor));
 
-      this.lineaTendencia = calcularLineaTendencia(this.$valores());
+      const { lineaTendencia, m, b } = calcularLineaTendencia(this.$valores());
+      this.lineaTendencia = lineaTendencia;
+      this.m = m;
+      this.b = b;
       this.initChart();
     }
   }
@@ -69,6 +75,8 @@ export class CChartComponent implements OnInit {
 
   initChart() {
     const documentStyle = getComputedStyle(document.documentElement);
+    // Cambiar el tamaño del texto de la leyenda
+    // Puedes ajustar el valor de font.size según lo que necesites (por ejemplo, 18)
     // const textColor = documentStyle.getPropertyValue('--p-text-color');
     const textColorSecondary = documentStyle.getPropertyValue(
       '--p-text-muted-color',
@@ -82,8 +90,11 @@ export class CChartComponent implements OnInit {
       datasets: [
         {
           // label: this.$indicador().titulo || 'datos',
-          label: 'Ver Datos',
+          label: '',
           type: this.$chart(),
+          legend: {
+            display: false,
+          },
 
           data: [
             ...this.$valores(),
@@ -122,16 +133,18 @@ export class CChartComponent implements OnInit {
         ...(this.$chart() === 'line'
           ? [
               {
-                label: 'Ver Línea de Tendencia (fórmula: y = m · x + b)',
+                label: !this.mostrarLeyenda
+                  ? `Línea de Tendencia (fórmula: y = (${this.m.toFixed(2)}) · x + (${this.b.toFixed(2)}))`
+                  : 'Ver Línea de Tendencia',
                 data: this.lineaTendencia,
                 type: 'line',
-                //borderColor: '#22c55e', // Verde
-                borderColor: '#FF6384', // Verde
-
+                borderColor: '#FF6384',
                 borderDash: [5, 5], // Línea discontinua para diferenciar
                 fill: false,
                 pointRadius: 0, // Sin puntos en la línea de tendencia
                 tension: 0.4, // Suaviza la línea, opcional
+                // Agregamos la propiedad 'hidden' para poder tachar la leyenda cuando se oculte
+                hidden: this.mostrarLeyenda,
               },
             ]
           : []),
@@ -144,9 +157,24 @@ export class CChartComponent implements OnInit {
           // forceOverride: true,
         },
         legend: {
-          display: true,
+          display: this.$chart() == 'line' ? true : false,
+
           labels: {
             // color: textColor,
+          },
+          onClick: (e: any, legendItem: any) => {
+            if (
+              legendItem.text.startsWith('Línea de Tendencia') ||
+              legendItem.text.startsWith('Ver Línea de Tendencia')
+            ) {
+              this.mostrarLeyenda = !this.mostrarLeyenda;
+
+              console.log(
+                '¡Hiciste clic en la leyenda de la línea de tendencia!',
+                this.mostrarLeyenda,
+              );
+              this.initChart();
+            }
           },
         },
       },
