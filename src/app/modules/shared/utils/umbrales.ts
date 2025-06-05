@@ -8,7 +8,7 @@ export enum severityType {
 const THRESHOLDS = {
   SUCCESS: 70,
   WARNING_MAX: 70,
-  WARNING_MIN: 30,
+  WARNING_MIN: 35,
 };
 
 export const getTagSeverity = (valor: number | undefined): severityType => {

@@ -34,6 +34,14 @@
         />
         <span class="font-bold whitespace-nowrap">Indicadores de Calidad</span>
       </p-tab>
+      <p-tab value="2" class="flex items-center !gap-2 Informacion">
+        <p-avatar
+          label="💡"
+          [style]="{ 'background-color': '#dee9fc', color: '#1a2551' }"
+          shape="circle"
+        />
+        <span class="font-bold whitespace-nowrap">Información de fórmulas</span>
+      </p-tab>
 
       <ng-template #nexticon>
         <i class="pi pi-plus"></i>
@@ -144,6 +152,56 @@
         </div>
 
         <!-- {{ $CalidadData.value() | json }} -->
+      </p-tabpanel>
+      <p-tabpanel value="2">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5 max-w-[1920px] mx-auto my-1"
+        >
+          <div
+            class="bg-white rounded-xl shadow p-4 mb-4 border border-gray-200"
+          >
+            <h2 class="text-lg font-semibold mb-2 text-gray-800">
+              ¿Cómo se calcula la línea de tendencia?
+            </h2>
+            <p class="text-gray-700 text-justify">
+              La <b>línea de tendencia</b> que se muestra en el gráfico se
+              calcula utilizando una <b>regresión lineal</b>, que es una fórmula
+              matemática para encontrar la recta que mejor se ajusta a los
+              datos. Esta recta ayuda a visualizar la tendencia general de los
+              valores a lo largo del tiempo.
+            </p>
+            <p class="mt-2 text-gray-700 text-justify">
+              La fórmula utilizada es:
+            </p>
+            <div class="bg-gray-50 rounded p-3 my-2 text-gray-800 text-sm">
+              <b>y = m · x + b</b>
+              <br />
+              <b>m</b>: pendiente de la recta<br />
+              <b>b</b>: punto de intersección con el eje y
+            </div>
+            <p class="text-gray-700 text-justify">Donde:</p>
+            <ul class="list-disc pl-6">
+              <li>
+                <b>m</b> se calcula con la fórmula:<br />
+                <span class="bg-gray-100 rounded px-1"
+                  >m = (n·Σ(xy) - Σx·Σy) / (n·Σ(x²) - (Σx)²)</span
+                >
+              </li>
+              <li>
+                <b>b</b> se calcula con la fórmula:<br />
+                <span class="bg-gray-100 rounded px-1"
+                  >b = (Σy - m·Σx) / n</span
+                >
+              </li>
+            </ul>
+            <p class="mt-2 text-gray-700 text-justify">
+              <b>n</b> es la cantidad de puntos, <b>x</b> es el índice de cada
+              dato (por ejemplo, el año o periodo), y <b>y</b> es el valor
+              correspondiente. Esta línea permite ver si los valores tienden a
+              aumentar, disminuir o mantenerse estables a lo largo del tiempo.
+            </p>
+          </div>
+        </div>
       </p-tabpanel>
     </p-tabpanels>
   </p-tabs>

@@ -3,7 +3,7 @@ import { DashboardComponent } from './modules/indicadores/pages/dashboard/dashbo
 
 export const routes: Routes = [
   {
-    path: 'indicadores/:idCarrera',
+    path: ':idCarrera',
     component: DashboardComponent,
   },
 ];
