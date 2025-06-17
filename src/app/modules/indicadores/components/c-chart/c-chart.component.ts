@@ -12,6 +12,7 @@ import { Indicadores } from '../../../shared/models/ICarrera.interfaces';
 import { Popover } from 'primeng/popover';
 import { PopoverModule } from 'primeng/popover';
 import { AccordionModule } from 'primeng/accordion';
+import { calcularLineaTendencia } from '../../../shared/utils/lineaTendencia';
 @Component({
   selector: 'app-c-chart',
   imports: [ChartModule, PopoverModule, AccordionModule],
@@ -27,6 +28,10 @@ export class CChartComponent implements OnInit {
   $periodos = signal<string[]>(['']);
   $valores = signal<number[]>([0]);
   $nombrePeriodo = signal<number>(0);
+  lineaTendencia: number[] = [];
+  m = 0;
+  b = 0;
+  mostrarLeyenda = false;
 
   // op = viewChild<ElementRef<HTMLButtonElement>>('op');
   effectloader = effect(() => {
@@ -54,6 +59,10 @@ export class CChartComponent implements OnInit {
 
       this.$valores.set(this.$indicador()!.periodos!.map((e) => e.valor));
 
+      const { lineaTendencia, m, b } = calcularLineaTendencia(this.$valores());
+      this.lineaTendencia = lineaTendencia;
+      this.m = m;
+      this.b = b;
       this.initChart();
     }
   }
@@ -65,29 +74,24 @@ export class CChartComponent implements OnInit {
   constructor(private cd: ChangeDetectorRef) {}
 
   initChart() {
-    const documentStyle = getComputedStyle(document.documentElement);
-    // const textColor = documentStyle.getPropertyValue('--p-text-color');
-    const textColorSecondary = documentStyle.getPropertyValue(
-      '--p-text-muted-color',
-    );
-    const surfaceBorder = documentStyle.getPropertyValue(
-      '--p-content-border-color',
-    );
-
     this.basicData = {
       labels: this.$periodos(),
       datasets: [
         {
+          // No ponemos 'label' para que no aparezca en la leyenda
+          //slabel: '',
           type: this.$chart(),
-
+          legend: {
+            display: false,
+          },
           data: [
             ...this.$valores(),
             // 10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
           ],
+          //fill: true,
           backgroundColor: [
-            'rgba(255, 255, 255, 0.1)',
-
-            // 'rgba(249, 115, 22, 0.4)',
+            // 'rgba(255, 255, 255, 0.6)',
+            'rgba(249, 115, 22, 0.5)',
             // 'rgba(6, 182, 212, 0.4)',
             // 'rgb(107, 114, 128, 0.4)',
             // 'rgba(139, 92, 246, 0.4)',
@@ -100,53 +104,142 @@ export class CChartComponent implements OnInit {
           ],
           borderColor: [
             'rgb(249, 115, 22)',
-            'rgb(6, 182, 212)',
-            'rgb(107, 114, 128)',
-            'rgb(139, 92, 246)',
-            'rgba(244, 63, 94)' /* Rojo */,
-            'rgba(34, 197, 94)' /* Verde */,
-            'rgba(236, 72, 153)' /* Rosa */,
-            'rgba(20, 184, 166)' /* Turquesa */,
-            'rgba(168, 85, 247)' /* Púrpura */,
-            'rgba(234, 179, 8)', // Amarillo mostaza
+            // 'rgb(6, 182, 212)',
+            // 'rgb(107, 114, 128)',
+            // 'rgb(139, 92, 246)',
+            // 'rgba(244, 63, 94)' /* Rojo */,
+            // 'rgba(34, 197, 94)' /* Verde */,
+            // 'rgba(236, 72, 153)' /* Rosa */,
+            // 'rgba(20, 184, 166)' /* Turquesa */,
+            // 'rgba(168, 85, 247)' /* Púrpura */,
+            // 'rgba(234, 179, 8)', // Amarillo mostaza
           ],
           borderWidth: 1,
+          //  tension: 0.4, // Suaviza la línea, opcional
         },
+
+        ...(this.$chart() === 'line'
+          ? [
+              {
+                label: !this.mostrarLeyenda
+                  ? `Línea de Tendencia (fórmula: y = (${this.m.toFixed(2)}) · x + (${this.b.toFixed(2)}))`
+                  : 'Ver Línea de Tendencia',
+                data: this.lineaTendencia,
+                type: 'line',
+                borderColor: '#FF6384',
+                borderDash: [5, 5], // Línea discontinua para diferenciar
+                fill: false,
+                pointRadius: 0, // Sin puntos en la línea de tendencia
+                tension: 0.4, // Suaviza la línea, opcional
+                // Agregamos la propiedad 'hidden' para poder tachar la leyenda cuando se oculte
+                hidden: this.mostrarLeyenda,
+              },
+            ]
+          : []),
       ],
     };
 
+    // Ahora, en la configuración de la leyenda, filtramos para que no muestre la leyenda del primer dataset
     this.basicOptions = {
       plugins: {
-        colors: {
-          // forceOverride: true,
-        },
+        colors: {},
         legend: {
-          display: false,
+          display: this.$chart() == 'line' ? true : false,
           labels: {
-            // color: textColor,
+            // Filtramos para que solo muestre leyendas de datasets que tengan label definido y no vacío
+            filter: function (item: any) {
+              // Si el label es undefined, null o cadena vacía, no mostrar
+              return !!item.text && item.text.trim() !== '';
+            },
+          },
+          onClick: (e: any, legendItem: any) => {
+            if (
+              legendItem.text.startsWith('Línea de Tendencia') ||
+              legendItem.text.startsWith('Ver Línea de Tendencia')
+            ) {
+              this.mostrarLeyenda = !this.mostrarLeyenda;
+
+              this.initChart();
+            }
           },
         },
       },
       scales: {
         x: {
           ticks: {
-            color: textColorSecondary,
+            color: getComputedStyle(document.documentElement).getPropertyValue(
+              '--p-text-muted-color',
+            ),
           },
           grid: {
-            color: surfaceBorder,
+            color: getComputedStyle(document.documentElement).getPropertyValue(
+              '--p-content-border-color',
+            ),
           },
         },
         y: {
           beginAtZero: true,
           ticks: {
-            color: textColorSecondary,
+            color: getComputedStyle(document.documentElement).getPropertyValue(
+              '--p-text-muted-color',
+            ),
           },
           grid: {
-            color: surfaceBorder,
+            color: getComputedStyle(document.documentElement).getPropertyValue(
+              '--p-content-border-color',
+            ),
           },
         },
       },
     };
+
+    // this.basicOptions = {
+    //   plugins: {
+    //     colors: {
+    //       // forceOverride: true,
+    //     },
+    //     legend: {
+    //       display: this.$chart() == 'line' ? true : false,
+
+    //       labels: {
+    //         // color: textColor,
+    //       },
+    //       onClick: (e: any, legendItem: any) => {
+    //         if (
+    //           legendItem.text.startsWith('Línea de Tendencia') ||
+    //           legendItem.text.startsWith('Ver Línea de Tendencia')
+    //         ) {
+    //           this.mostrarLeyenda = !this.mostrarLeyenda;
+
+    //           console.log(
+    //             '¡Hiciste clic en la leyenda de la línea de tendencia!',
+    //             this.mostrarLeyenda,
+    //           );
+    //           this.initChart();
+    //         }
+    //       },
+    //     },
+    //   },
+    //   scales: {
+    //     x: {
+    //       ticks: {
+    //         color: textColorSecondary,
+    //       },
+    //       grid: {
+    //         color: surfaceBorder,
+    //       },
+    //     },
+    //     y: {
+    //       beginAtZero: true,
+    //       ticks: {
+    //         color: textColorSecondary,
+    //       },
+    //       grid: {
+    //         color: surfaceBorder,
+    //       },
+    //     },
+    //   },
+    // };
     this.cd.markForCheck();
   }
 
