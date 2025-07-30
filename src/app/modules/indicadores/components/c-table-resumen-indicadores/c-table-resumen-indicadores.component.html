@@ -7,6 +7,8 @@
     [tableStyle]="{ 'min-width': '6rem' }"
     [size]="'small'"
     selectionMode="single"
+    [scrollable]="true"
+    scrollHeight="500px"
   >
     <ng-template #header>
       <tr>
@@ -37,7 +39,12 @@
       <tr [pSelectableRow]="product">
         <td>{{ product.codigoPeriodo }}</td>
         <td>{{ product.descripcion }}</td>
-        <td>{{ product.ValorAdmitidos }}</td>
+        @if (product.codigoPeriodo === "P0043") {
+          <td></td>
+        } @else {
+          <td>{{ product.ValorAdmitidos }}</td>
+        }
+        <!-- <td>{{ product.ValorAdmitidos }}</td> -->
         <td>{{ product.valorMatriculados }}</td>
         <td>{{ product.valorRetencion }} %</td>
         <td>{{ product.valorDesercion }} %</td>
