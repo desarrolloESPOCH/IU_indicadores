@@ -1,15 +1,7 @@
 <!-- cspell:disable -->
 <div class="card md:px-5">
-  <p-table
-    [value]="graduados()"
-    stripedRows
-    showGridlines
-    [tableStyle]="{ 'min-width': '6rem' }"
-    [size]="'small'"
-    selectionMode="single"
-    [scrollable]="true"
-    scrollHeight="500px"
-  >
+  <p-table [value]="graduados()" stripedRows showGridlines [tableStyle]="{ 'min-width': '6rem' }" [size]="'small'"
+    selectionMode="single" [scrollable]="true" scrollHeight="500px">
     <ng-template #header>
       <tr>
         <th pSortableColumn="codigoPeriodo">
@@ -39,11 +31,7 @@
       <tr [pSelectableRow]="product">
         <td>{{ product.codigoPeriodo }}</td>
         <td>{{ product.descripcion }}</td>
-        @if (product.codigoPeriodo === "P0043") {
-          <td></td>
-        } @else {
-          <td>{{ product.ValorAdmitidos }}</td>
-        }
+        <td>{{ product.ValorAdmitidos }}</td>
         <!-- <td>{{ product.ValorAdmitidos }}</td> -->
         <td>{{ product.valorMatriculados }}</td>
         <td>{{ product.valorRetencion }} %</td>
