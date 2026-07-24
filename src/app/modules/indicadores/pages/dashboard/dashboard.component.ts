@@ -144,6 +144,13 @@ export class DashboardComponent implements AfterViewInit {
     loader: ({ request }) => this.swCalidad.getAll(request),
   });
 
+  $CalidadDataActivos = linkedSignal(() => {
+    const res = this.$CalidadData.value();
+    if (!res || !res.data) return [];
+    const array = Array.isArray(res.data) ? res.data : [res.data];
+    return array.filter((item: any) => item.estado === 1);
+  });
+
   ngAfterViewInit(): void {
     const driverObj = driver({
       nextBtnText: 'Siguiente',

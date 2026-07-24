@@ -39,9 +39,9 @@
           >PERIODO:
           <p-tag
             [severity]="
-              this.getTagSeverity($indicador().periodos[$nombrePeriodo()]?.valor)
+              this.getTagSeverity($indicador().periodos[$nombrePeriodo()].valor)
             "
-            value=" {{ $indicador().periodos[$nombrePeriodo()]?.nombrePeriodo || 'Sin nombre' }}"
+            value=" {{ $indicador().periodos[$nombrePeriodo()].nombrePeriodo || 'Sin nombre' }}"
           />
         </span>
         <span
@@ -50,9 +50,9 @@
           {{ $indicador().titulo }}:
           <p-tag
             [severity]="
-              getTagSeverity($indicador().periodos[$nombrePeriodo()]?.valor)
+              getTagSeverity($indicador().periodos[$nombrePeriodo()].valor)
             "
-            value=" {{ $indicador().periodos[$nombrePeriodo()]?.valor ?? 0 }} %"
+            value=" {{ $indicador().periodos[$nombrePeriodo()].valor }} %"
           />
         </span>
       </div>
