@@ -41,7 +41,7 @@
             [severity]="
               this.getTagSeverity($indicador().periodos[$nombrePeriodo()].valor)
             "
-            value=" {{ $indicador().periodos[$nombrePeriodo()].nombrePeriodo }}"
+            value=" {{ $indicador().periodos[$nombrePeriodo()].nombrePeriodo || 'Sin nombre' }}"
           />
         </span>
         <span

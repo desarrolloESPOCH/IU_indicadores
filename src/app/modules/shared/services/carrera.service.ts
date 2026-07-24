@@ -48,4 +48,27 @@ export class CarreraService {
     const data = await response.json();
     return data;
   };
+
+  updateAcademico = async (
+    codigoCarrera: string,
+    codigoPeriodo: string,
+    valorRetencion: number,
+    valorDesercion: number,
+    valorTitulacion: number,
+    estado: number,
+  ): Promise<IResponse<any>> => {
+    const response = await fetch(`${environment.api}/academico/valor`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        codigoCarrera,
+        codigoPeriodo,
+        valorRetencion,
+        valorDesercion,
+        valorTitulacion,
+        estado,
+      }),
+    });
+    return await response.json();
+  };
 }

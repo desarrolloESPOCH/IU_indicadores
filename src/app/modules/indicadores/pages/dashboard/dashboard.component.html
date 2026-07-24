@@ -20,7 +20,7 @@
       </ng-template>
       <p-tab value="0" class="flex items-center !gap-2 IndicadorAca">
         <p-avatar
-          label="🧠"
+          icon="pi pi-graduation-cap"
           [style]="{ 'background-color': '#dee9fc', color: '#1a2551' }"
           shape="circle"
         />
@@ -28,7 +28,7 @@
       </p-tab>
       <p-tab value="1" class="flex items-center !gap-2 IndicadorCal">
         <p-avatar
-          label="🔝"
+          icon="pi pi-star"
           [style]="{ 'background-color': '#dee9fc', color: '#1a2551' }"
           shape="circle"
         />
@@ -128,7 +128,7 @@
           class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5 max-w-[1920px] mx-auto"
         >
           @for (
-            indicador of $CalidadData.value()?.data;
+            indicador of $CalidadDataActivos();
             let i = $index;
             track indicador.titulo
           ) {

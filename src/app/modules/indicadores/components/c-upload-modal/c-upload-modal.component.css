@@ -1,0 +1,11 @@
+:host {
+  display: block;
+}
+
+.upload-modal .p-dialog-header {
+  padding: 1.25rem 1.5rem 0.75rem 1.5rem;
+}
+
+.upload-modal .p-dialog-content {
+  padding: 0.5rem 1.5rem 1rem 1.5rem;
+}

@@ -1,0 +1,400 @@
+<!-- Header Navbar -->
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <img src="./espoch2.png" width="38" alt="ESPOCH Logo" class="object-contain" />
+      <div>
+        <h1 class="text-base sm:text-lg font-bold text-gray-800 leading-tight">
+          Centro de Datos e Indicadores
+        </h1>
+        <p class="text-xs text-gray-500 hidden sm:block">
+          Plataforma de Administración y Actualización de Indicadores Académicos y de Calidad
+        </p>
+      </div>
+    </div>
+
+    <div>
+      <a
+        routerLink="/soft"
+        class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors"
+      >
+        <i class="pi pi-arrow-left text-xs"></i>
+        <span>Volver al Dashboard</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Main Container -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+  <!-- Pestañas Principales: Carga Masiva vs Gestión de Datos -->
+  <p-tabs value="0" scrollable class="w-full">
+    <p-tablist class="mb-6">
+      <p-tab value="0" class="flex items-center gap-2">
+        <i class="pi pi-cloud-upload"></i>
+        <span class="font-bold">Carga Masiva</span>
+      </p-tab>
+      <p-tab value="1" class="flex items-center gap-2">
+        <i class="pi pi-sliders-h"></i>
+        <span class="font-bold">Gestión de Indicadores</span>
+      </p-tab>
+    </p-tablist>
+
+    <p-tabpanels>
+      
+      <!-- PESTAÑA 1: CARGA MASIVA (DISEÑO ACTUAL) -->
+      <p-tabpanel value="0">
+        <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+          <div class="bg-gradient-to-r from-slate-900 to-blue-950 p-6 text-white">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="p-2.5 bg-blue-600/30 rounded-xl text-blue-300 border border-blue-400/20">
+                <i class="pi pi-file-excel text-xl"></i>
+              </span>
+              <div>
+                <h2 class="text-xl font-bold">Procesamiento de Matrices Excel</h2>
+                <p class="text-xs text-blue-200">
+                  Sube los archivos correspondientes a las tasas académicas o indicadores de calidad en formato .xlsx
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 space-y-6">
+            <!-- Selección del Tipo de Carga -->
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-3">
+                1. Selecciona el Tipo de Indicador a Cargar
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div
+                  (click)="setTipoCarga('academicos')"
+                  [ngClass]="{
+                    'border-blue-600 bg-blue-50/80 shadow-md ring-2 ring-blue-500/20': tipoCarga() === 'academicos',
+                    'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/50': tipoCarga() !== 'academicos'
+                  }"
+                  class="p-4 rounded-xl border-2 transition-all cursor-pointer flex items-start gap-3.5"
+                >
+                  <div
+                    [ngClass]="{
+                      'bg-blue-600 text-white': tipoCarga() === 'academicos',
+                      'bg-gray-100 text-gray-500': tipoCarga() !== 'academicos'
+                    }"
+                    class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 font-bold"
+                  >
+                    <i class="pi pi-chart-line text-lg"></i>
+                  </div>
+                  <div>
+                    <div class="font-bold text-gray-800 text-sm flex items-center gap-2">
+                      Indicadores Académicos
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+                      Tasas de retención, deserción y titulación por facultad, carrera y periodo.
+                    </p>
+                  </div>
+                </div>
+
+                <div
+                  (click)="setTipoCarga('calidad')"
+                  [ngClass]="{
+                    'border-blue-600 bg-blue-50/80 shadow-md ring-2 ring-blue-500/20': tipoCarga() === 'calidad',
+                    'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/50': tipoCarga() !== 'calidad'
+                  }"
+                  class="p-4 rounded-xl border-2 transition-all cursor-pointer flex items-start gap-3.5"
+                >
+                  <div
+                    [ngClass]="{
+                      'bg-blue-600 text-white': tipoCarga() === 'calidad',
+                      'bg-gray-100 text-gray-500': tipoCarga() !== 'calidad'
+                    }"
+                    class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 font-bold"
+                  >
+                    <i class="pi pi-star text-lg"></i>
+                  </div>
+                  <div>
+                    <div class="font-bold text-gray-800 text-sm flex items-center gap-2">
+                      Indicadores de Calidad
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+                      Evaluaciones periódicas multinhoja con orden cronológico y descriptivo.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cuadro Informativo -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-600">
+              <div class="font-bold text-slate-800 flex items-center gap-2 mb-2 text-sm">
+                <i class="pi pi-info-circle text-blue-600"></i>
+                <span>Estructura Requerida del Archivo Excel</span>
+              </div>
+
+              <ng-container *ngIf="tipoCarga() === 'academicos'">
+                <p class="mb-2">La primera fila (Fila 1) del Excel debe contener exactamente las siguientes columnas:</p>
+                <div class="overflow-x-auto bg-white p-2.5 rounded-lg border border-slate-200 mb-2 font-mono text-[11px] text-slate-700">
+                  facultad | codigo | carrera | periodo | retencion | desercion | titulacion
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="tipoCarga() === 'calidad'">
+                <p class="mb-2">Este formato procesa <strong>múltiples hojas</strong> dentro del mismo libro de Excel:</p>
+                <ul class="list-disc pl-5 space-y-1">
+                  <li><strong>Celda A1:</strong> Nombre o código principal del indicador de calidad.</li>
+                  <li><strong>Celda M1:</strong> Descripción detallada del indicador.</li>
+                  <li><strong>Fila 2 (desde Columna C):</strong> Nombres de los periodos.</li>
+                  <li><strong>Fila 3 en adelante:</strong> Columna A = Código carrera, Columna C+ = Valores del indicador.</li>
+                </ul>
+              </ng-container>
+            </div>
+
+            <!-- Zona de Selección / Soltar Archivo -->
+            <div>
+              <label class="block text-sm font-bold text-gray-700 mb-3">
+                2. Selecciona o Arrastra el Archivo Excel (.xlsx)
+              </label>
+
+              <div
+                *ngIf="!selectedFile()"
+                (dragover)="onDragOver($event)"
+                (dragleave)="onDragLeave($event)"
+                (drop)="onDrop($event)"
+                (click)="fileInput.click()"
+                [ngClass]="{
+                  'border-blue-500 bg-blue-50/60 scale-[1.01] shadow-inner': isDragOver(),
+                  'border-gray-300 hover:border-blue-400 bg-gray-50/50 hover:bg-slate-50': !isDragOver()
+                }"
+                class="border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-3"
+              >
+                <input
+                  #fileInput
+                  type="file"
+                  accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                  class="hidden"
+                  (change)="onFileSelected($event)"
+                />
+                <div class="w-14 h-14 rounded-2xl bg-blue-100/80 text-blue-600 flex items-center justify-center">
+                  <i class="pi pi-cloud-upload text-3xl"></i>
+                </div>
+                <div>
+                  <span class="font-bold text-gray-800 text-sm block">
+                    Haz clic aquí para examinar o arrastra tu archivo Excel
+                  </span>
+                  <span class="text-xs text-gray-400 mt-1 block">
+                    Se aceptan únicamente archivos con extensión <strong>.xlsx</strong>
+                  </span>
+                </div>
+              </div>
+
+              <div
+                *ngIf="selectedFile()"
+                class="flex items-center justify-between p-4 border border-emerald-200 bg-emerald-50/70 rounded-2xl"
+              >
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                    <i class="pi pi-file-excel text-2xl"></i>
+                  </div>
+                  <div>
+                    <span class="font-bold text-gray-800 text-sm block truncate max-w-sm">
+                      {{ selectedFile()?.name }}
+                    </span>
+                    <span class="text-xs text-emerald-700 font-medium">
+                      Tamaño: {{ formatFileSize(selectedFile()?.size || 0) }}
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  (click)="removeFile()"
+                  [disabled]="isUploading()"
+                  class="p-2.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
+                >
+                  <i class="pi pi-trash text-xl"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Alertas de Estado -->
+            <div *ngIf="successMessage()" class="p-4 bg-emerald-100/90 border border-emerald-300 text-emerald-900 text-sm rounded-xl flex items-center gap-3">
+              <i class="pi pi-check-circle text-emerald-600 text-xl shrink-0"></i>
+              <span>{{ successMessage() }}</span>
+            </div>
+
+            <div *ngIf="errorMessage()" class="p-4 bg-red-100/90 border border-red-300 text-red-900 text-sm rounded-xl flex items-center gap-3">
+              <i class="pi pi-exclamation-triangle text-red-600 text-xl shrink-0"></i>
+              <span>{{ errorMessage() }}</span>
+            </div>
+
+            <!-- Botón de Procesar -->
+            <div class="pt-4 border-t border-gray-100 flex justify-end">
+              <p-button
+                [label]="isUploading() ? 'Procesando Excel...' : 'Procesar y Cargar Datos'"
+                [icon]="isUploading() ? 'pi pi-spin pi-spinner' : 'pi pi-upload'"
+                severity="primary"
+                size="large"
+                (onClick)="processUpload()"
+                [disabled]="!selectedFile() || isUploading()"
+                class="w-full sm:w-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </p-tabpanel>
+
+      <!-- PESTAÑA 2: GESTIÓN DE INDICADORES (NUEVA INTERFAZ) -->
+      <p-tabpanel value="1">
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 space-y-6">
+          
+          <!-- Filtro Superior: Selector de Carrera -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">
+            <div>
+              <h2 class="text-lg font-bold text-gray-800">Administrador de Datos por Carrera</h2>
+              <p class="text-xs text-gray-500">Selecciona una carrera para editar o alternar la visualización de sus indicadores.</p>
+            </div>
+            
+            <div class="w-full sm:w-80">
+              <p-select
+                [options]="careersList()"
+                [(ngModel)]="selectedCareer"
+                optionLabel="name"
+                placeholder="Seleccione la carrera..."
+                (onChange)="onCareerChange($event)"
+                [filter]="true"
+                filterBy="name,code"
+                class="w-full"
+              >
+                <ng-template #item let-item>
+                  <div class="flex items-center justify-between w-full">
+                    <span>{{ item.name }}</span>
+                    <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded font-mono ml-2 shrink-0">{{ item.code }}</span>
+                  </div>
+                </ng-template>
+              </p-select>
+            </div>
+          </div>
+
+          <!-- Mensajes de Estado en la Gestión -->
+          <div *ngIf="managementMessage()" 
+               [ngClass]="{
+                 'bg-emerald-50 border-emerald-200 text-emerald-900': managementMessage()?.type === 'success',
+                 'bg-red-50 border-red-200 text-red-900': managementMessage()?.type === 'error'
+               }"
+               class="p-4 border text-sm rounded-xl flex items-center gap-3">
+            <i [ngClass]="managementMessage()?.type === 'success' ? 'pi pi-check-circle text-emerald-600' : 'pi pi-exclamation-triangle text-red-600'" class="text-xl shrink-0"></i>
+            <span>{{ managementMessage()?.text }}</span>
+          </div>
+
+          <!-- Spinner de Carga de Gestión -->
+          <div *ngIf="isLoadingManagement()" class="flex flex-col items-center justify-center py-12">
+            <p-progress-spinner strokeWidth="6" [style]="{ width: '40px', height: '40px' }" />
+            <span class="text-xs text-gray-500 mt-2">Cargando información de la carrera...</span>
+          </div>
+
+          <!-- Contenido de Gestión -->
+          <div *ngIf="!isLoadingManagement() && selectedCareer()" class="space-y-8">
+            
+            <!-- SECCIÓN A: INDICADORES ACADÉMICOS -->
+            <div class="space-y-4">
+              <div class="flex items-center gap-2">
+                <span class="p-1.5 bg-blue-50 text-blue-700 rounded-lg"><i class="pi pi-chart-line text-sm"></i></span>
+                <h3 class="text-md font-bold text-gray-800">Indicadores Académicos (Tasa Retención, Deserción y Titulación)</h3>
+              </div>
+
+              <div class="overflow-x-auto rounded-xl border border-gray-200">
+                <p-table [value]="academicPeriods()" [size]="'small'" stripedRows>
+                  <ng-template #header>
+                    <tr>
+                      <th>Código Periodo</th>
+                      <th>Descripción Periodo</th>
+                      <th class="w-24">Retención (%)</th>
+                      <th class="w-24">Deserción (%)</th>
+                      <th class="w-24">Titulación (%)</th>
+                      <th class="w-32 text-center">Mostrar en Dashboard</th>
+                      <th class="w-28 text-center">Acciones</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template #body let-row>
+                    <tr>
+                      <td class="font-semibold text-gray-700">{{ row.codigoPeriodo }}</td>
+                      <td class="text-gray-500">{{ row.descripcion || 'Sin nombre' }}</td>
+                      <td>
+                        <input type="number" step="0.01" [(ngModel)]="row.valorRetencion" class="w-full border border-gray-300 rounded px-2 py-1 text-sm text-center" />
+                      </td>
+                      <td>
+                        <input type="number" step="0.01" [(ngModel)]="row.valorDesercion" class="w-full border border-gray-300 rounded px-2 py-1 text-sm text-center" />
+                      </td>
+                      <td>
+                        <input type="number" step="0.01" [(ngModel)]="row.ValorTitulacion" class="w-full border border-gray-300 rounded px-2 py-1 text-sm text-center" />
+                      </td>
+                      <td class="text-center">
+                        <p-toggle-switch [(ngModel)]="row.estadoBool"></p-toggle-switch>
+                      </td>
+                      <td class="text-center">
+                        <button (click)="saveAcademicRow(row)" class="px-3 py-1 bg-blue-600 text-white rounded text-xs font-semibold hover:bg-blue-700 transition-colors cursor-pointer">
+                          <i class="pi pi-save mr-1"></i> Guardar
+                        </button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </div>
+
+            <!-- SECCIÓN B: INDICADORES DE CALIDAD -->
+            <div class="space-y-4">
+              <div class="flex items-center gap-2">
+                <span class="p-1.5 bg-purple-50 text-purple-700 rounded-lg"><i class="pi pi-star text-sm"></i></span>
+                <h3 class="text-md font-bold text-gray-800">Indicadores de Calidad</h3>
+              </div>
+
+              <div class="space-y-4">
+                <div *ngFor="let ind of qualityIndicators()" class="border border-gray-200 rounded-xl p-4 space-y-3 bg-slate-50/50">
+                  <div class="flex items-center justify-between flex-wrap gap-2">
+                    <div>
+                      <h4 class="font-bold text-gray-800 text-sm">{{ ind.titulo }}</h4>
+                      <p class="text-xs text-gray-500 italic max-w-2xl">{{ ind.descripcion || 'Sin descripción' }}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs font-semibold text-gray-600">Visible Global:</span>
+                      <p-toggle-switch [(ngModel)]="ind.estadoBool" (onChange)="toggleQualityState(ind)"></p-toggle-switch>
+                    </div>
+                  </div>
+
+                  <!-- Tabla de valores del indicador de calidad -->
+                  <div class="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+                    <p-table [value]="ind.periodos" [size]="'small'">
+                      <ng-template #header>
+                        <tr>
+                          <th>Periodo</th>
+                          <th class="w-48 text-center">Valor (%)</th>
+                          <th class="w-32 text-center">Acciones</th>
+                        </tr>
+                      </ng-template>
+                      <ng-template #body let-p>
+                        <tr>
+                          <td class="text-gray-700 text-xs font-medium">{{ p.nombrePeriodo }}</td>
+                          <td class="text-center">
+                            <input type="number" step="0.01" [(ngModel)]="p.editingVal" placeholder="NULL" class="w-32 border border-gray-300 rounded px-2 py-1 text-sm text-center mx-auto" />
+                          </td>
+                          <td class="text-center">
+                            <button (click)="saveQualityValue(ind, p)" class="px-2.5 py-1 bg-purple-600 text-white rounded text-xs font-semibold hover:bg-purple-700 transition-colors cursor-pointer">
+                              <i class="pi pi-save mr-1"></i> Guardar
+                            </button>
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </p-tabpanel>
+
+    </p-tabpanels>
+  </p-tabs>
+
+</main>

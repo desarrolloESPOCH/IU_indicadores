@@ -1,5 +1,12 @@
 export const calcularLineaTendencia = (datos: number[]) => {
   const n = datos.length;
+  if (n <= 1) {
+    return {
+      lineaTendencia: datos.slice(),
+      m: 0,
+      b: datos[0] || 0,
+    };
+  }
   let sumaX = 0,
     sumaY = 0,
     sumaXY = 0,

@@ -30,6 +30,7 @@ import { CalidadService } from '../../../shared/services/calidad.service';
 import { CChartCalidadComponent } from '../../components/c-chart-calidad/c-chart-calidad.component';
 import { driver } from 'driver.js';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 @Component({
   selector: 'app-dashboard',
   imports: [
@@ -141,6 +142,13 @@ export class DashboardComponent implements AfterViewInit {
   $CalidadData = resource({
     request: () => this.$carrera(),
     loader: ({ request }) => this.swCalidad.getAll(request),
+  });
+
+  $CalidadDataActivos = linkedSignal(() => {
+    const res = this.$CalidadData.value();
+    if (!res || !res.data) return [];
+    const array = Array.isArray(res.data) ? res.data : [res.data];
+    return array.filter((item: any) => item.estado === 1);
   });
 
   ngAfterViewInit(): void {
