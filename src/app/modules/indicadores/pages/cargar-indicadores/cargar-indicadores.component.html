@@ -1,0 +1,243 @@
+<!-- Header Navbar -->
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <img src="./espoch2.png" width="38" alt="ESPOCH Logo" class="object-contain" />
+      <div>
+        <h1 class="text-base sm:text-lg font-bold text-gray-800 leading-tight">
+          Carga Masiva de Indicadores
+        </h1>
+        <p class="text-xs text-gray-500 hidden sm:block">
+          Plataforma de Actualización de Datos Institucionales
+        </p>
+      </div>
+    </div>
+
+    <div>
+      <a
+        routerLink="/soft"
+        class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors"
+      >
+        <i class="pi pi-arrow-left text-xs"></i>
+        <span>Volver al Dashboard</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Main Container -->
+<main class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+
+  <!-- Card Principal -->
+  <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+
+    <!-- Subcabecera explicativa -->
+    <div class="bg-gradient-to-r from-slate-900 to-blue-950 p-6 text-white">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="p-2.5 bg-blue-600/30 rounded-xl text-blue-300 border border-blue-400/20">
+          <i class="pi pi-file-excel text-xl"></i>
+        </span>
+        <div>
+          <h2 class="text-xl font-bold">Procesamiento de Matrices Excel</h2>
+          <p class="text-xs text-blue-200">
+            Sube los archivos correspondientes a las tasas académicas o indicadores de calidad en formato .xlsx
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-6 space-y-6">
+
+      <!-- Pestañas de Selección del Tipo de Carga -->
+      <div>
+        <label class="block text-sm font-bold text-gray-700 mb-3">
+          1. Selecciona el Tipo de Indicador a Cargar
+        </label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+          <!-- Opción 1: Indicadores Académicos -->
+          <div
+            (click)="setTipoCarga('academicos')"
+            [ngClass]="{
+              'border-blue-600 bg-blue-50/80 shadow-md ring-2 ring-blue-500/20': tipoCarga() === 'academicos',
+              'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/50': tipoCarga() !== 'academicos'
+            }"
+            class="p-4 rounded-xl border-2 transition-all cursor-pointer flex items-start gap-3.5 relative overflow-hidden"
+          >
+            <div
+              [ngClass]="{
+                'bg-blue-600 text-white': tipoCarga() === 'academicos',
+                'bg-gray-100 text-gray-500': tipoCarga() !== 'academicos'
+              }"
+              class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 font-bold transition-colors"
+            >
+              <i class="pi pi-chart-line text-lg"></i>
+            </div>
+            <div>
+              <div class="font-bold text-gray-800 text-sm flex items-center gap-2">
+                Indicadores Académicos
+                <span *ngIf="tipoCarga() === 'academicos'" class="w-2 h-2 rounded-full bg-blue-600"></span>
+              </div>
+              <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+                Tasas de retención, deserción y titulación por facultad, carrera y periodo.
+              </p>
+            </div>
+          </div>
+
+          <!-- Opción 2: Indicadores de Calidad -->
+          <div
+            (click)="setTipoCarga('calidad')"
+            [ngClass]="{
+              'border-blue-600 bg-blue-50/80 shadow-md ring-2 ring-blue-500/20': tipoCarga() === 'calidad',
+              'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/50': tipoCarga() !== 'calidad'
+            }"
+            class="p-4 rounded-xl border-2 transition-all cursor-pointer flex items-start gap-3.5 relative overflow-hidden"
+          >
+            <div
+              [ngClass]="{
+                'bg-blue-600 text-white': tipoCarga() === 'calidad',
+                'bg-gray-100 text-gray-500': tipoCarga() !== 'calidad'
+              }"
+              class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 font-bold transition-colors"
+            >
+              <i class="pi pi-star text-lg"></i>
+            </div>
+            <div>
+              <div class="font-bold text-gray-800 text-sm flex items-center gap-2">
+                Indicadores de Calidad
+                <span *ngIf="tipoCarga() === 'calidad'" class="w-2 h-2 rounded-full bg-blue-600"></span>
+              </div>
+              <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+                Evaluaciones periódicas multinhoja con orden cronológico y descriptivo.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Cuadro Informativo sobre la Estructura Esperada del Excel -->
+      <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-600">
+        <div class="font-bold text-slate-800 flex items-center gap-2 mb-2 text-sm">
+          <i class="pi pi-info-circle text-blue-600"></i>
+          <span>Estructura Requerida del Archivo Excel</span>
+        </div>
+
+        <ng-container *ngIf="tipoCarga() === 'academicos'">
+          <p class="mb-2">La primera fila (Fila 1) del Excel debe contener exactamente las siguientes columnas:</p>
+          <div class="overflow-x-auto bg-white p-2.5 rounded-lg border border-slate-200 mb-2 font-mono text-[11px] text-slate-700">
+            facultad | codigo | carrera | periodo | retencion | desercion | titulacion
+          </div>
+          <p class="text-[11px] text-slate-500">
+            * <strong>Comportamiento Upsert:</strong> Si la combinación de carrera y periodo ya existe, el sistema actualizará los valores automáticamente.
+          </p>
+        </ng-container>
+
+        <ng-container *ngIf="tipoCarga() === 'calidad'">
+          <p class="mb-2">Este formato procesa <strong>múltiples hojas</strong> dentro del mismo libro de Excel:</p>
+          <ul class="list-disc pl-5 space-y-1">
+            <li><strong>Celda A1:</strong> Nombre o código principal del indicador de calidad.</li>
+            <li><strong>Fila 2 (desde Columna C):</strong> Nombres de los periodos (ej. <em>SEMESTRE AGOSTO 2023</em>).</li>
+            <li><strong>Celda L2 o M2:</strong> Descripción detallada del indicador.</li>
+            <li><strong>Fila 3 en adelante:</strong> Columna A = Código carrera, Columna C+ = Valores numéricos.</li>
+          </ul>
+        </ng-container>
+      </div>
+
+      <!-- Zona de Selección / Soltar Archivo -->
+      <div>
+        <label class="block text-sm font-bold text-gray-700 mb-3">
+          2. Selecciona o Arrastra el Archivo Excel (.xlsx)
+        </label>
+
+        <!-- Dropzone cuando no hay archivo seleccionado -->
+        <div
+          *ngIf="!selectedFile()"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onDrop($event)"
+          (click)="fileInput.click()"
+          [ngClass]="{
+            'border-blue-500 bg-blue-50/60 scale-[1.01] shadow-inner': isDragOver(),
+            'border-gray-300 hover:border-blue-400 bg-gray-50/50 hover:bg-slate-50': !isDragOver()
+          }"
+          class="border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-3 group"
+        >
+          <input
+            #fileInput
+            type="file"
+            accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            class="hidden"
+            (change)="onFileSelected($event)"
+          />
+          <div class="w-14 h-14 rounded-2xl bg-blue-100/80 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <i class="pi pi-cloud-upload text-3xl"></i>
+          </div>
+          <div>
+            <span class="font-bold text-gray-800 text-sm block">
+              Haz clic aquí para examinar o arrastra tu archivo Excel
+            </span>
+            <span class="text-xs text-gray-400 mt-1 block">
+              Se aceptan únicamente archivos con extensión <strong>.xlsx</strong>
+            </span>
+          </div>
+        </div>
+
+        <!-- Vista de Archivo Seleccionado -->
+        <div
+          *ngIf="selectedFile()"
+          class="flex items-center justify-between p-4 border border-emerald-200 bg-emerald-50/70 rounded-2xl"
+        >
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+              <i class="pi pi-file-excel text-2xl"></i>
+            </div>
+            <div>
+              <span class="font-bold text-gray-800 text-sm block truncate max-w-sm sm:max-w-md">
+                {{ selectedFile()?.name }}
+              </span>
+              <span class="text-xs text-emerald-700 font-medium">
+                Tamaño: {{ formatFileSize(selectedFile()?.size || 0) }}
+              </span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            (click)="removeFile()"
+            [disabled]="isUploading()"
+            class="p-2.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
+            title="Quitar archivo"
+          >
+            <i class="pi pi-trash text-xl"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Alertas de Estado -->
+      <div *ngIf="successMessage()" class="p-4 bg-emerald-100/90 border border-emerald-300 text-emerald-900 text-sm rounded-xl flex items-center gap-3">
+        <i class="pi pi-check-circle text-emerald-600 text-xl shrink-0"></i>
+        <span>{{ successMessage() }}</span>
+      </div>
+
+      <div *ngIf="errorMessage()" class="p-4 bg-red-100/90 border border-red-300 text-red-900 text-sm rounded-xl flex items-center gap-3">
+        <i class="pi pi-exclamation-triangle text-red-600 text-xl shrink-0"></i>
+        <span>{{ errorMessage() }}</span>
+      </div>
+
+      <!-- Botón de Procesar -->
+      <div class="pt-4 border-t border-gray-100 flex justify-end">
+        <p-button
+          [label]="isUploading() ? 'Procesando Excel...' : 'Procesar y Cargar Datos'"
+          [icon]="isUploading() ? 'pi pi-spin pi-spinner' : 'pi pi-upload'"
+          severity="primary"
+          size="large"
+          (onClick)="processUpload()"
+          [disabled]="!selectedFile() || isUploading()"
+          class="w-full sm:w-auto"
+        />
+      </div>
+
+    </div>
+  </div>
+</main>

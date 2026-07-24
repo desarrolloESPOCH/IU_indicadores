@@ -30,6 +30,7 @@ import { CalidadService } from '../../../shared/services/calidad.service';
 import { CChartCalidadComponent } from '../../components/c-chart-calidad/c-chart-calidad.component';
 import { driver } from 'driver.js';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 @Component({
   selector: 'app-dashboard',
   imports: [
